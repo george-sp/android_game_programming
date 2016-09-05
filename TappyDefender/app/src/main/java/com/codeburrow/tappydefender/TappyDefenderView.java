@@ -108,14 +108,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             // Has the player lifted there finger up?
             case MotionEvent.ACTION_UP:
-                // Do something here.
-                Log.e(LOG_TAG, "Touch Event: Action UP");
+                player.stopBoosting();
                 break;
 
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
-                // Do something here.
-                Log.e(LOG_TAG, "Touch Event: Action DOWN");
+                player.setBoosting();
                 break;
         }
         return true;

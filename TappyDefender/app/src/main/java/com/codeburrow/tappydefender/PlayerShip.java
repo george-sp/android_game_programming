@@ -13,6 +13,17 @@ public class PlayerShip {
     private int x, y;
     private int speed;
 
+    private boolean boosting;
+
+    private final int GRAVITY = -12;
+
+    // Stop ship leaving the screen.
+    private int maxY;
+    private int minY;
+    // Limit the ship's speed.
+    private final int MIN_SPEED = 1;
+    private final int MAX_SPEED = 20;
+
     // Constructor
     public PlayerShip(Context context) {
         x = 50;
@@ -22,7 +33,40 @@ public class PlayerShip {
     }
 
     public void update() {
-        x++;
+        // Handle ship's speed.
+        if (boosting) {
+            speed += 2;
+        } else {
+            speed -= 5;
+        }
+
+        // Constrain its top speed.
+        if (speed > MAX_SPEED) {
+            speed = MAX_SPEED;
+        }
+        // Never stop it completely.
+        if (speed < MIN_SPEED) {
+            speed = MIN_SPEED;
+        }
+
+        // Move the sheep up or down.
+        y -= speed + GRAVITY;
+
+        // Do not let it stray off screen.
+        if (y < minY) {
+            y = minY;
+        }
+        if (y > maxY) {
+            y = maxY;
+        }
+    }
+
+    public void setBoosting() {
+        boosting = true;
+    }
+
+    public void stopBoosting() {
+        boosting = false;
     }
 
     public Bitmap getBitmap() {
