@@ -26,6 +26,15 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     volatile boolean playing;
     Thread gameThread = null;
 
+    private int screenX;
+    private int screenY;
+
+    // Data for the HUD
+    private float distanceRemaining;
+    private long timeTaken;
+    private long timeStarted;
+    private long fastestTime;
+
     // Game objects
     private PlayerShip player;
     public EnemyShip enemy1;
@@ -45,6 +54,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
     public TappyDefenderView(Context context, int x, int y) {
         super(context);
+
+        screenX = x;
+        screenY = y;
 
         // Initialize our drawing objects.
         surfaceHolder = getHolder();
@@ -170,6 +182,15 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
                     (enemy3.getBitmap(),
                             enemy3.getX(),
                             enemy3.getY(), paint);
+            // Draw the HUD.
+            paint.setTextAlign(Paint.Align.LEFT);
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            paint.setTextSize(25);
+            canvas.drawText("Fastest:" + fastestTime + "s", 10, 20, paint);
+            canvas.drawText("Time:" + timeTaken + "s", screenX / 2, 20, paint);
+            canvas.drawText("Distance:" + distanceRemaining / 1000 + " KM", screenX / 3, screenY - 60, paint);
+            canvas.drawText("Shield:" + player.getShieldStrength(), 10, screenY - 60, paint);
+            canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", (screenX / 3) * 2, screenY - 60, paint);
             // Unlock the Canvas object and draw the scene.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

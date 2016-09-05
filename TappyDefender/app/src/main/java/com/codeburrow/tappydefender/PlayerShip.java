@@ -15,6 +15,7 @@ public class PlayerShip {
     private int speed;
 
     private boolean boosting;
+    private int shieldStrength;
 
     private final int GRAVITY = -12;
 
@@ -33,6 +34,8 @@ public class PlayerShip {
         x = 50;
         y = 50;
         speed = 1;
+        shieldStrength = 2;
+
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
 
         maxY = screenY - bitmap.getHeight();
@@ -87,6 +90,10 @@ public class PlayerShip {
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public int getShieldStrength() {
+        return shieldStrength;
     }
 
     public int getSpeed() {
