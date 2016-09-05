@@ -1,7 +1,11 @@
 package com.codeburrow.tappydefender;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
@@ -18,8 +22,29 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     volatile boolean playing;
     Thread gameThread = null;
 
+    // Game objects
+    private PlayerShip player;
+
+    // For drawing
+    // A virtual Canvas to draw graphics upon.
+    private Canvas canvas;
+    // Use a Paint object to add Bitmaps and manipulate individual px on Canvas.
+    private Paint paint;
+    // Locks the Canvas object while it is manipulated
+    // and unlocks it when it is ready to draw the frames.
+    private SurfaceHolder surfaceHolder;
+
     public TappyDefenderView(Context context) {
         super(context);
+
+        // Initialize our drawing objects
+        surfaceHolder = getHolder();
+        paint = new Paint();
+
+        // Initialize our player ship
+        player = new PlayerShip(context);
+
+
     }
 
     /**
@@ -39,13 +64,29 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
      * Updates all the game data.
      */
     private void update() {
+        // Update the player
+        player.update();
     }
 
     /**
      * Draws the screen based on that game data.
      */
     private void draw() {
-
+        // Check that the SurfaceHolder class is valid.
+        if (surfaceHolder.getSurface().isValid()) {
+            // Lock the area of memory we will be drawing to.
+            canvas = surfaceHolder.lockCanvas();
+            // Clear the screen from the last frame, with a call to drawColor().
+            canvas.drawColor(Color.argb(255, 0, 0, 0));
+            // Draw the player.
+            canvas.drawBitmap(
+                    player.getBitmap(),
+                    player.getX(),
+                    player.getY(),
+                    paint);
+            // Unlock the Canvas object and draw the scene.
+            surfaceHolder.unlockCanvasAndPost(canvas);
+        }
     }
 
     /**
