@@ -43,8 +43,6 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
         // Initialize our player ship
         player = new PlayerShip(context);
-
-
     }
 
     /**
@@ -93,7 +91,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
      * Controls how long it is until the run method is called again.
      */
     private void control() {
-
+        try {
+            // Pass the thread for (1000 milliseconds / 60 HPS) approximately 17 millis.
+            gameThread.sleep(17);
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
     }
 
     /**
