@@ -9,6 +9,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 /**
  * This class represents the view of our game. -- A dynamically drawn view.
  */
@@ -28,6 +30,8 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     public EnemyShip enemy1;
     public EnemyShip enemy2;
     public EnemyShip enemy3;
+    // Space dust
+    ArrayList<SpaceDust> dustList = new ArrayList<>();
 
     // For drawing
     // A virtual Canvas to draw graphics upon.
@@ -41,15 +45,24 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     public TappyDefenderView(Context context, int x, int y) {
         super(context);
 
-        // Initialize our drawing objects
+        // Initialize our drawing objects.
         surfaceHolder = getHolder();
         paint = new Paint();
 
-        // Initialize our player ship
+        // Initialize our player ship.
         player = new PlayerShip(context, x, y);
+        // Initialize the enemy ships.
         enemy1 = new EnemyShip(context, x, y);
         enemy2 = new EnemyShip(context, x, y);
         enemy3 = new EnemyShip(context, x, y);
+
+        // Make some random space dust.
+        int numSpecs = 50;
+        for (int i = 0; i < numSpecs; i++) {
+            // Where will the dust spawn?
+            SpaceDust spaceDust = new SpaceDust(x, y);
+            dustList.add(spaceDust);
+        }
     }
 
     /**
@@ -75,6 +88,10 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         enemy1.update(player.getSpeed());
         enemy2.update(player.getSpeed());
         enemy3.update(player.getSpeed());
+
+        for (SpaceDust spaceDust : dustList) {
+            spaceDust.update(player.getSpeed());
+        }
     }
 
     /**
@@ -87,6 +104,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             canvas = surfaceHolder.lockCanvas();
             // Clear the screen from the last frame, with a call to drawColor().
             canvas.drawColor(Color.argb(255, 0, 0, 0));
+            // White specs of dust.
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            //Draw the dust from our arrayList.
+            for (SpaceDust spaceDust : dustList) {
+                canvas.drawPoint(spaceDust.getX(), spaceDust.getY(), paint);
+            }
             // Draw the player.
             canvas.drawBitmap(
                     player.getBitmap(),
