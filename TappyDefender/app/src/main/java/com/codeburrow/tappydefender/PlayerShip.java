@@ -96,6 +96,10 @@ public class PlayerShip {
         return shieldStrength;
     }
 
+    public void reduceShieldStrength() {
+        shieldStrength--;
+    }
+
     public int getSpeed() {
         return speed;
     }

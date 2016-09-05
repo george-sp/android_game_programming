@@ -26,6 +26,8 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     volatile boolean playing;
     Thread gameThread = null;
 
+    private Context context;
+
     private int screenX;
     private int screenY;
 
@@ -55,6 +57,8 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     public TappyDefenderView(Context context, int x, int y) {
         super(context);
 
+        this.context = context;
+
         screenX = x;
         screenY = y;
 
@@ -62,6 +66,10 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         surfaceHolder = getHolder();
         paint = new Paint();
 
+        startGame();
+    }
+
+    private void startGame() {
         // Initialize our player ship.
         player = new PlayerShip(context, x, y);
         // Initialize the enemy ships.
@@ -76,6 +84,13 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             SpaceDust spaceDust = new SpaceDust(x, y);
             dustList.add(spaceDust);
         }
+
+        // Reset taken time and remaining distance.
+        distanceRemaining = 10000;
+        timeTaken = 0;
+
+        // Get the current time.
+        timeStarted = System.currentTimeMillis();
     }
 
     /**
@@ -102,14 +117,25 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
          * If you are using images in excess of 100 pixels wide
          * then increase the -100 value accordingly.
          */
+        boolean hitDetected = false;
         if (Rect.intersects(player.getHitbox(), enemy1.getHitbox())) {
             enemy1.setX(-enemy1.getBitmap().getWidth());
+            hitDetected = true;
         }
         if (Rect.intersects(player.getHitbox(), enemy2.getHitbox())) {
             enemy2.setX(-enemy2.getBitmap().getWidth());
+            hitDetected = true;
         }
         if (Rect.intersects(player.getHitbox(), enemy3.getHitbox())) {
             enemy3.setX(-enemy3.getBitmap().getWidth());
+            hitDetected = true;
+        }
+
+        if (hitDetected) {
+            player.reduceShieldStrength();
+            if (player.getShieldStrength() < 0) {
+                //game over so do something
+            }
         }
 
         // Update the player.
