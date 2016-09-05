@@ -3,6 +3,7 @@ package com.codeburrow.tappydefender;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 /**
  * A class for the player's spaceship.
@@ -24,6 +25,9 @@ public class PlayerShip {
     private final int MIN_SPEED = 1;
     private final int MAX_SPEED = 20;
 
+    // A hit box for collision detection.
+    private Rect hitBox;
+
     // Constructor
     public PlayerShip(Context context, int screenX, int screenY) {
         x = 50;
@@ -33,6 +37,9 @@ public class PlayerShip {
 
         maxY = screenY - bitmap.getHeight();
         minY = 0;
+
+        // Initialize the hit box.
+        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public void update() {
@@ -62,6 +69,12 @@ public class PlayerShip {
         if (y > maxY) {
             y = maxY;
         }
+
+        // Refresh hit box location.
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
     }
 
     public void setBoosting() {
@@ -73,22 +86,22 @@ public class PlayerShip {
     }
 
     public Bitmap getBitmap() {
-
         return bitmap;
     }
 
     public int getSpeed() {
-
         return speed;
     }
 
     public int getX() {
-
         return x;
     }
 
     public int getY() {
-
         return y;
+    }
+
+    public Rect getHitbox() {
+        return hitBox;
     }
 }

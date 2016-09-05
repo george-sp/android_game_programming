@@ -3,6 +3,7 @@ package com.codeburrow.tappydefender;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 import java.util.Random;
 
@@ -23,6 +24,9 @@ public class EnemyShip {
     private int maxY;
     private int minY;
 
+    // A hit box for collision detection.
+    private Rect hitBox;
+
     // Constructor
     public EnemyShip(Context context, int screenX, int screenY) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
@@ -37,6 +41,9 @@ public class EnemyShip {
 
         x = screenX;
         y = random.nextInt(maxY) - bitmap.getHeight();
+
+        // Initialize the hit box.
+        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public void update(int playerSpeed) {
@@ -51,6 +58,12 @@ public class EnemyShip {
             x = maxX;
             y = generator.nextInt(maxY) - bitmap.getHeight();
         }
+
+        // Refresh hit box location.
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
     }
 
     public Bitmap getBitmap() {
@@ -61,7 +74,15 @@ public class EnemyShip {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
     public int getY() {
         return y;
+    }
+
+    public Rect getHitbox() {
+        return hitBox;
     }
 }
