@@ -35,7 +35,7 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     // and unlocks it when it is ready to draw the frames.
     private SurfaceHolder surfaceHolder;
 
-    public TappyDefenderView(Context context) {
+    public TappyDefenderView(Context context, int x, int y) {
         super(context);
 
         // Initialize our drawing objects
@@ -43,7 +43,7 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         paint = new Paint();
 
         // Initialize our player ship
-        player = new PlayerShip(context);
+        player = new PlayerShip(context, x, y);
     }
 
     /**
