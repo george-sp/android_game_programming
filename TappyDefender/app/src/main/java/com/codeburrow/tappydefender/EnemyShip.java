@@ -32,11 +32,25 @@ public class EnemyShip {
         minX = 0;
         minY = 0;
 
-        Random generator = new Random();
-        speed = generator.nextInt(6) + 10;
+        Random random = new Random();
+        speed = random.nextInt(6) + 10;
 
         x = screenX;
-        y = generator.nextInt(maxY) - bitmap.getHeight();
+        y = random.nextInt(maxY) - bitmap.getHeight();
+    }
+
+    public void update(int playerSpeed) {
+        x -= playerSpeed;
+        x -= speed;
+
+        // Respawn when the right-hand edge of the enemy bitmap has disappeared
+        // from the left-hand side of the screen.
+        if (x < minX - bitmap.getWidth()) {
+            Random generator = new Random();
+            speed = generator.nextInt(10) + 10;
+            x = maxX;
+            y = generator.nextInt(maxY) - bitmap.getHeight();
+        }
     }
 
     public Bitmap getBitmap() {

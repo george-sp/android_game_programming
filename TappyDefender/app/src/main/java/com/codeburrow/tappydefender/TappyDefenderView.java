@@ -25,6 +25,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
     // Game objects
     private PlayerShip player;
+    public EnemyShip enemy1;
+    public EnemyShip enemy2;
+    public EnemyShip enemy3;
 
     // For drawing
     // A virtual Canvas to draw graphics upon.
@@ -44,6 +47,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
         // Initialize our player ship
         player = new PlayerShip(context, x, y);
+        enemy1 = new EnemyShip(context, x, y);
+        enemy2 = new EnemyShip(context, x, y);
+        enemy3 = new EnemyShip(context, x, y);
     }
 
     /**
@@ -63,8 +69,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
      * Updates all the game data.
      */
     private void update() {
-        // Update the player
+        // Update the player.
         player.update();
+        // Update the enemies.
+        enemy1.update(player.getSpeed());
+        enemy2.update(player.getSpeed());
+        enemy3.update(player.getSpeed());
     }
 
     /**
@@ -83,6 +93,19 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
                     player.getX(),
                     player.getY(),
                     paint);
+            // Draw the enemies.
+            canvas.drawBitmap
+                    (enemy1.getBitmap(),
+                            enemy1.getX(),
+                            enemy1.getY(), paint);
+            canvas.drawBitmap
+                    (enemy2.getBitmap(),
+                            enemy2.getX(),
+                            enemy2.getY(), paint);
+            canvas.drawBitmap
+                    (enemy3.getBitmap(),
+                            enemy3.getX(),
+                            enemy3.getY(), paint);
             // Unlock the Canvas object and draw the scene.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
