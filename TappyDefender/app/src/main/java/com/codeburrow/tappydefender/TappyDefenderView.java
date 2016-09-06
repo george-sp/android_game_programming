@@ -301,6 +301,10 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
                 player.setBoosting();
+                // If we are currently on the pause screen, start a new game.
+                if (gameEnded) {
+                    startGame();
+                }
                 break;
         }
         return true;
