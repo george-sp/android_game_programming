@@ -1,15 +1,20 @@
 package com.codeburrow.tappydefender;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +51,13 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     // Space dust
     ArrayList<SpaceDust> dustList = new ArrayList<>();
 
+    // For the Sound FX.
+    private SoundPool soundPool;
+    int start = -1;
+    int bump = -1;
+    int destroyed = -1;
+    int win = -1;
+
     // For drawing
     // A virtual Canvas to draw graphics upon.
     private Canvas canvas;
@@ -57,8 +69,30 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
     public TappyDefenderView(Context context, int x, int y) {
         super(context);
-
         this.context = context;
+
+        // This SoundPool is deprecated but don't worry
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        try {
+            //Create objects of the 2 required classes
+            AssetManager assetManager = context.getAssets();
+            AssetFileDescriptor descriptor;
+
+            // Create our three FX in memory ready for use.
+            descriptor = assetManager.openFd("start.ogg");
+            start = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("win.ogg");
+            win = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("bump.ogg");
+            bump = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("crash.ogg");
+            destroyed = soundPool.load(descriptor, 0);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
 
         screenX = x;
         screenY = y;
@@ -71,6 +105,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     }
 
     private void startGame() {
+        // Play the start sound
+        soundPool.play(start, 1, 1, 0, 0, 1);
+
         // Initialize our player ship.
         player = new PlayerShip(context, screenX, screenY);
         // Initialize the enemy ships.
@@ -161,16 +198,19 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             timeTaken = System.currentTimeMillis() - timeStarted;
         }
 
-        // Game Over. Player lost all his shields.
         if (hitDetected) {
+            soundPool.play(bump, 1, 1, 0, 0, 1);
             player.reduceShieldStrength();
+            // Game Over. Player lost all his shields.
             if (player.getShieldStrength() < 0) {
+                soundPool.play(destroyed, 1, 1, 0, 0, 1);
                 gameEnded = true;
             }
         }
 
         // Completed the game! Player won!
         if (distanceRemaining < 0) {
+            soundPool.play(win, 1, 1, 0, 0, 1);
             // Check for new fastest time.
             if (timeTaken < fastestTime) {
                 fastestTime = timeTaken;
