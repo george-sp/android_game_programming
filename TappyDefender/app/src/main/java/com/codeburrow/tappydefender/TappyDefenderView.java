@@ -1,6 +1,7 @@
 package com.codeburrow.tappydefender;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
@@ -67,6 +68,10 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     // and unlocks it when it is ready to draw the frames.
     private SurfaceHolder surfaceHolder;
 
+    // For saving and loading the high score
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+
     public TappyDefenderView(Context context, int x, int y) {
         super(context);
         this.context = context;
@@ -100,6 +105,11 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         // Initialize our drawing objects.
         surfaceHolder = getHolder();
         paint = new Paint();
+
+        // Load fastest time, if not available our high-score = 1000000.
+        prefs = context.getSharedPreferences("HighScores", context.MODE_PRIVATE);
+        editor = prefs.edit();
+        fastestTime = prefs.getLong("fastestTime", 1000000);
 
         startGame();
     }
@@ -213,6 +223,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             soundPool.play(win, 1, 1, 0, 0, 1);
             // Check for new fastest time.
             if (timeTaken < fastestTime) {
+                // Save fastestTime as the new high score.
+                editor.putLong("fastestTime", timeTaken);
+                editor.commit();
                 fastestTime = timeTaken;
             }
 
