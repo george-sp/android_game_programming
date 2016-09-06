@@ -24,6 +24,7 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
      * is used to indicate that a variable's value will be modified by different threads.
      */
     volatile boolean playing;
+    private boolean gameEnded;
     Thread gameThread = null;
 
     private Context context;
@@ -71,17 +72,17 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
     private void startGame() {
         // Initialize our player ship.
-        player = new PlayerShip(context, x, y);
+        player = new PlayerShip(context, screenX, screenY);
         // Initialize the enemy ships.
-        enemy1 = new EnemyShip(context, x, y);
-        enemy2 = new EnemyShip(context, x, y);
-        enemy3 = new EnemyShip(context, x, y);
+        enemy1 = new EnemyShip(context, screenX, screenY);
+        enemy2 = new EnemyShip(context, screenX, screenY);
+        enemy3 = new EnemyShip(context, screenX, screenY);
 
         // Make some random space dust.
         int numSpecs = 50;
         for (int i = 0; i < numSpecs; i++) {
             // Where will the dust spawn?
-            SpaceDust spaceDust = new SpaceDust(x, y);
+            SpaceDust spaceDust = new SpaceDust(screenX, screenY);
             dustList.add(spaceDust);
         }
 
@@ -91,6 +92,9 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
         // Get the current time.
         timeStarted = System.currentTimeMillis();
+
+        // Initialize the boolean gameEnded.
+        gameEnded = false;
     }
 
     /**
@@ -147,6 +151,36 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
 
         for (SpaceDust spaceDust : dustList) {
             spaceDust.update(player.getSpeed());
+        }
+
+        if (!gameEnded) {
+            // Subtract distance to home planet based on current speed.
+            distanceRemaining -= player.getSpeed();
+
+            // How long has the player been flying.
+            timeTaken = System.currentTimeMillis() - timeStarted;
+        }
+
+        // Game Over. Player lost all his shields.
+        if (hitDetected) {
+            player.reduceShieldStrength();
+            if (player.getShieldStrength() < 0) {
+                gameEnded = true;
+            }
+        }
+
+        // Completed the game! Player won!
+        if (distanceRemaining < 0) {
+            // Check for new fastest time.
+            if (timeTaken < fastestTime) {
+                fastestTime = timeTaken;
+            }
+
+            // Avoid ugly negative numbers in the HUD.
+            distanceRemaining = 0;
+
+            // Now end the game.
+            gameEnded = true;
         }
     }
 
@@ -208,15 +242,34 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
                     (enemy3.getBitmap(),
                             enemy3.getX(),
                             enemy3.getY(), paint);
-            // Draw the HUD.
-            paint.setTextAlign(Paint.Align.LEFT);
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            paint.setTextSize(25);
-            canvas.drawText("Fastest:" + fastestTime + "s", 10, 20, paint);
-            canvas.drawText("Time:" + timeTaken + "s", screenX / 2, 20, paint);
-            canvas.drawText("Distance:" + distanceRemaining / 1000 + " KM", screenX / 3, screenY - 60, paint);
-            canvas.drawText("Shield:" + player.getShieldStrength(), 10, screenY - 60, paint);
-            canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", (screenX / 3) * 2, screenY - 60, paint);
+
+            if (!gameEnded) {
+                // Draw the HUD.
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                paint.setTextSize(25);
+                canvas.drawText("Fastest:" + fastestTime + "s", 10, 20, paint);
+                canvas.drawText("Time:" + timeTaken + "s", screenX / 2, 20, paint);
+                canvas.drawText("Distance:" + distanceRemaining / 1000 + " KM", screenX / 3, screenY - 60, paint);
+                canvas.drawText("Shield:" + player.getShieldStrength(), 10, screenY - 60, paint);
+                canvas.drawText("Speed:" + player.getSpeed() * 60 + " MPS", (screenX / 3) * 2, screenY - 60, paint);
+            } else {
+                // This happens the game is ended.
+                // Show pause screen.
+                paint.setTextSize(80);
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText("Game Over", screenX / 2, 100, paint);
+                paint.setTextSize(25);
+                canvas.drawText("Fastest:" +
+                        fastestTime + "s", screenX / 2, 160, paint);
+                canvas.drawText("Time:" + timeTaken +
+                        "s", screenX / 2, 200, paint);
+                canvas.drawText("Distance remaining:" +
+                        distanceRemaining / 1000 + " KM", screenX / 2, 240, paint);
+                paint.setTextSize(80);
+                canvas.drawText("Tap to replay!", screenX / 2, 350, paint);
+            }
+
             // Unlock the Canvas object and draw the scene.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
