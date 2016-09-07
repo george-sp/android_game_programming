@@ -49,6 +49,8 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
     public EnemyShip enemy1;
     public EnemyShip enemy2;
     public EnemyShip enemy3;
+    public EnemyShip enemy4;
+    public EnemyShip enemy5;
     // Space dust
     ArrayList<SpaceDust> dustList = new ArrayList<>();
 
@@ -124,6 +126,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         enemy1 = new EnemyShip(context, screenX, screenY);
         enemy2 = new EnemyShip(context, screenX, screenY);
         enemy3 = new EnemyShip(context, screenX, screenY);
+        if (screenX > 1000) {
+            enemy4 = new EnemyShip(context, screenX, screenY);
+        }
+        if (screenX > 1200) {
+            enemy5 = new EnemyShip(context, screenX, screenY);
+        }
 
         // Make some random space dust.
         int numSpecs = 50;
@@ -181,6 +189,18 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
             enemy3.setX(-enemy3.getBitmap().getWidth());
             hitDetected = true;
         }
+        if (screenX > 1000) {
+            if (Rect.intersects(player.getHitbox(), enemy4.getHitbox())) {
+                enemy4.setX(-enemy4.getBitmap().getWidth());
+                hitDetected = true;
+            }
+        }
+        if (screenX > 1200) {
+            if (Rect.intersects(player.getHitbox(), enemy3.getHitbox())) {
+                enemy5.setX(-enemy5.getBitmap().getWidth());
+                hitDetected = true;
+            }
+        }
 
         if (hitDetected) {
             player.reduceShieldStrength();
@@ -195,6 +215,12 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
         enemy1.update(player.getSpeed());
         enemy2.update(player.getSpeed());
         enemy3.update(player.getSpeed());
+        if (screenX > 1000) {
+            enemy4.update(player.getSpeed());
+        }
+        if (screenX > 1200) {
+            enemy5.update(player.getSpeed());
+        }
 
         for (SpaceDust spaceDust : dustList) {
             spaceDust.update(player.getSpeed());
@@ -283,18 +309,15 @@ public class TappyDefenderView extends SurfaceView implements Runnable {
                     player.getY(),
                     paint);
             // Draw the enemies.
-            canvas.drawBitmap
-                    (enemy1.getBitmap(),
-                            enemy1.getX(),
-                            enemy1.getY(), paint);
-            canvas.drawBitmap
-                    (enemy2.getBitmap(),
-                            enemy2.getX(),
-                            enemy2.getY(), paint);
-            canvas.drawBitmap
-                    (enemy3.getBitmap(),
-                            enemy3.getX(),
-                            enemy3.getY(), paint);
+            canvas.drawBitmap(enemy1.getBitmap(), enemy1.getX(), enemy1.getY(), paint);
+            canvas.drawBitmap(enemy2.getBitmap(), enemy2.getX(), enemy2.getY(), paint);
+            canvas.drawBitmap(enemy3.getBitmap(), enemy3.getX(), enemy3.getY(), paint);
+            if (screenX > 1000) {
+                canvas.drawBitmap(enemy4.getBitmap(), enemy4.getX(), enemy4.getY(), paint);
+            }
+            if (screenX > 1200) {
+                canvas.drawBitmap(enemy5.getBitmap(), enemy5.getX(), enemy5.getY(), paint);
+            }
 
             if (!gameEnded) {
                 // Draw the HUD.

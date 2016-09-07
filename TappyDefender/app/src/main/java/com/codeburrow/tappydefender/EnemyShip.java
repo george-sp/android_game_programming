@@ -43,6 +43,8 @@ public class EnemyShip {
                 break;
         }
 
+        scaleBitmap(screenX);
+
         maxX = screenX;
         maxY = screenY;
         minX = 0;
@@ -75,6 +77,27 @@ public class EnemyShip {
         hitBox.top = y;
         hitBox.right = x + bitmap.getWidth();
         hitBox.bottom = y + bitmap.getHeight();
+    }
+
+    /**
+     * Uses the resolution and the static createScaledBitmap method
+     * to reduce our Bitmap objects on a scale of 2 or 3
+     * depending on the resolution of the screen.
+     *
+     * @param screenX The horizontal resolution of the screen.
+     */
+    public void scaleBitmap(int screenX) {
+        if (screenX < 1000) {
+            bitmap = Bitmap.createScaledBitmap(bitmap,
+                    bitmap.getWidth() / 3,
+                    bitmap.getHeight() / 3,
+                    false);
+        } else if (screenX < 1200) {
+            bitmap = Bitmap.createScaledBitmap(bitmap,
+                    bitmap.getWidth() / 2,
+                    bitmap.getHeight() / 2,
+                    false);
+        }
     }
 
     public Bitmap getBitmap() {
