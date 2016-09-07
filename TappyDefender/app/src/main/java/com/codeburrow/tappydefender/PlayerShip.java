@@ -34,7 +34,7 @@ public class PlayerShip {
         x = 50;
         y = 50;
         speed = 1;
-        shieldStrength = 2;
+        shieldStrength = 100;
 
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
 
