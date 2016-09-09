@@ -89,6 +89,10 @@ public class PlatformView extends SurfaceView implements Runnable {
                 if (!viewport.clipObjects(go.getWorldLocation().x, go.getWorldLocation().y, go.getWidth(), go.getHeight())) {
                     // Set visible flag to true.
                     go.setVisible(true);
+                    if (levelManager.isPlaying()) {
+                        // Run any un-clipped updates.
+                        go.update(fps, levelManager.gravity);
+                    }
                 } else {
                     // Set visible flag to false.
                     go.setVisible(false);
@@ -135,6 +139,9 @@ public class PlatformView extends SurfaceView implements Runnable {
                 canvas.drawText("num clipped:" + viewport.getNumClipped(), 10, 100, paint);
                 canvas.drawText("playerX:" + levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x, 10, 120, paint);
                 canvas.drawText("playerY:" + levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().y, 10, 140, paint);
+                canvas.drawText("Gravity:" + levelManager.gravity, 10, 160, paint);
+                canvas.drawText("X velocity:" + levelManager.gameObjects.get(levelManager.playerIndex).getxVelocity(), 10, 180, paint);
+                canvas.drawText("Y velocity:" + levelManager.gameObjects.get(levelManager.playerIndex).getyVelocity(), 10, 200, paint);
                 // Reset the number of clipped objects.
                 viewport.resetNumClipped();
             }
