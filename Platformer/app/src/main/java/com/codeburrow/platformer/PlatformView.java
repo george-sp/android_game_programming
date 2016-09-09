@@ -78,7 +78,18 @@ public class PlatformView extends SurfaceView implements Runnable {
     }
 
     private void update() {
-
+        for (GameObject go : levelManager.gameObjects) {
+            if (go.isActive()) {
+                // Clip anything off-screen.
+                if (!viewport.clipObjects(go.getWorldLocation().x, go.getWorldLocation().y, go.getWidth(), go.getHeight())) {
+                    // Set visible flag to true.
+                    go.setVisible(true);
+                } else {
+                    // Set visible flag to false.
+                    go.setVisible(false);
+                }
+            }
+        }
     }
 
     private void draw() {
