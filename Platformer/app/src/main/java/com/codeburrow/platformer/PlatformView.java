@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -100,6 +101,39 @@ public class PlatformView extends SurfaceView implements Runnable {
             // Delete the last frame with arbitrary color.
             paint.setColor(Color.argb(255, 0, 0, 255));
             canvas.drawColor(Color.argb(255, 0, 0, 255));
+
+            // Draw all the GameObjects.
+            Rect toScreen2d = new Rect();
+            // Draw a layer at a time.
+            for (int layer = -1; layer <= 1; layer++)
+                // Iterate through the gameObjects ArrayList once for each layer,
+                // starting with the lowest layer.
+                for (GameObject go : levelManager.gameObjects) {
+                    // Check if the object is visible and on the current layer.
+                    if (go.isVisible() && go.getWorldLocation().z == layer) {
+                        toScreen2d.set(viewport.worldToScreen(
+                                go.getWorldLocation().x,
+                                go.getWorldLocation().y,
+                                go.getWidth(),
+                                go.getHeight()));
+                        // Draw the appropriate bitmap.
+                        canvas.drawBitmap(levelManager.bitmapsArray[levelManager.getBitmapIndex(go.getType())], toScreen2d.left, toScreen2d.top, paint);
+                    }
+                }
+
+            // Draw some debugging info.
+            if (debugging) {
+                paint.setTextSize(16);
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                canvas.drawText("fps:" + fps, 10, 60, paint);
+                canvas.drawText("num objects:" + levelManager.gameObjects.size(), 10, 80, paint);
+                canvas.drawText("num clipped:" + viewport.getNumClipped(), 10, 100, paint);
+                canvas.drawText("playerX:" + levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x, 10, 120, paint);
+                canvas.drawText("playerY:" + levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().y, 10, 140, paint);
+                // Reset the number of clipped objects.
+                viewport.resetNumClipped();
+            }
 
             // Finish editing pixels in the surface.
             surfaceHolder.unlockCanvasAndPost(canvas);
