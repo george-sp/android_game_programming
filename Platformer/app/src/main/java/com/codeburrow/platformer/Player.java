@@ -7,6 +7,28 @@ import android.content.Context;
  */
 public class Player extends GameObject {
 
+    // How fast the player can move.
+    final float MAX_X_VELOCITY = 10;
+    // Indicate if the player is moving to the left or right, falling or jumping.
+    boolean isPressingRight = false;
+    boolean isPressingLeft = false;
+    public boolean isFalling;
+    private boolean isJumping;
+    // How long it has been jumping.
+    private long jumpTime;
+    // Maximum jump time is set to 7 10ths of second half up half down.
+    private long maxJumpTime = 700;
+    // The horizontal and vertical speed.
+    private float xVelocity;
+    private float yVelocity;
+    // The direction the player object is facing.
+    final int LEFT = -1;
+    final int RIGHT = 1;
+    private int facing;
+    // The ability to move.
+    private boolean moves = false;
+
+
     Player(Context context, float worldStartX, float worldStartY, int pixelsPerMetre) {
         final float HEIGHT = 2;
         final float WIDTH = 1;
