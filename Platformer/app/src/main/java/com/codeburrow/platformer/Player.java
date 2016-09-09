@@ -36,7 +36,7 @@ public class Player extends GameObject {
         setHeight(HEIGHT); // 2 metre tall.
         setWidth(WIDTH); // 1 metre wide.
 
-        // Set player standing to start.
+        // Set player standing still to start.
         setxVelocity(0);
         setyVelocity(0);
         setFacing(LEFT);
@@ -60,5 +60,46 @@ public class Player extends GameObject {
     }
 
     public void update(long fps, float gravity) {
+        // Set the player's velocity if left or right is pressed.
+        if (isPressingRight) {
+            this.setxVelocity(MAX_X_VELOCITY);
+        } else if (isPressingLeft) {
+            this.setxVelocity(-MAX_X_VELOCITY);
+        } else {
+            this.setxVelocity(0);
+        }
+
+        // Check if player is moving and setFacing.
+        if (this.getxVelocity() > 0) {
+            //facing right
+            setFacing(RIGHT);
+        } else if (this.getxVelocity() < 0) {
+            //facing left
+            setFacing(LEFT);
+        }
+
+        // Handle jumping and gravity.
+        if (isJumping) {
+            long timeJumping = System.currentTimeMillis() - jumpTime;
+            if (timeJumping < maxJumpTime) {
+                if (timeJumping < maxJumpTime / 2) {
+                    this.setyVelocity(-gravity);//on the way up
+                } else if (timeJumping > maxJumpTime / 2) {
+                    this.setyVelocity(gravity);//going down
+                }
+            } else {
+                isJumping = false;
+            }
+        } else {
+            this.setyVelocity(gravity);
+            /*
+             * The next line stops the player from being able to jump in mid air.
+             * Comment it in to make the game easier.
+             */
+            isFalling = true;
+        }
+
+        // Update the x and y coordinates.
+        this.move(fps);
     }
 }
