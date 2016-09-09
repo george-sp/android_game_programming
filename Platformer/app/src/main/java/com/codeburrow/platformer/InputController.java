@@ -5,4 +5,8 @@ package com.codeburrow.platformer;
  */
 public class InputController {
 
+    public InputController(int screenWidth, int screenHeight) {
+
+    }
+
 }
