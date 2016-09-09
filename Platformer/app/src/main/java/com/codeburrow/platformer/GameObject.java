@@ -11,6 +11,13 @@ import android.graphics.BitmapFactory;
  */
 public abstract class GameObject {
 
+    private float xVelocity;
+    private float yVelocity;
+    final int LEFT = -1;
+    final int RIGHT = 1;
+    private int facing;
+    private boolean moves = false;
+
     private Vector2Point worldLocation;
     private float width;
     private float height;
@@ -63,6 +70,25 @@ public abstract class GameObject {
         this.worldLocation.z = z;
     }
 
+    /**
+     * Uses the velocity divided by the current frames per second
+     * to calculate the distance to move per frame.
+     * <p/>
+     * This ensures that the movement will be exactly correct,
+     * regardless of the current frames per second.
+     *
+     * @param fps
+     */
+    void move(long fps) {
+        if (xVelocity != 0) {
+            this.worldLocation.x += xVelocity / fps;
+        }
+
+        if (yVelocity != 0) {
+            this.worldLocation.y += yVelocity / fps;
+        }
+    }
+
     public void setBitmapName(String bitmapName) {
         this.bitmapName = bitmapName;
     }
@@ -101,5 +127,47 @@ public abstract class GameObject {
 
     public void setType(char type) {
         this.type = type;
+    }
+
+    public int getFacing() {
+        return facing;
+    }
+
+    public void setFacing(int facing) {
+        this.facing = facing;
+    }
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(float xVelocity) {
+        // Check if the object "moves" before assign a value.
+        if (moves) {
+            this.xVelocity = xVelocity;
+        }
+    }
+
+    public float getyVelocity() {
+        return yVelocity;
+    }
+
+    public void setyVelocity(float yVelocity) {
+        // Check if the object "moves" before assign a value.
+        if (moves) {
+            this.yVelocity = yVelocity;
+        }
+    }
+
+    public boolean isMoves() {
+        return moves;
+    }
+
+    public void setMoves(boolean moves) {
+        this.moves = moves;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
