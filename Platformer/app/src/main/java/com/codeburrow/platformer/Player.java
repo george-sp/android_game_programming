@@ -36,6 +36,16 @@ public class Player extends GameObject {
         setHeight(HEIGHT); // 2 metre tall.
         setWidth(WIDTH); // 1 metre wide.
 
+        // Set player standing to start.
+        setxVelocity(0);
+        setyVelocity(0);
+        setFacing(LEFT);
+        isFalling = false;
+        // Set up the player's other attributes.
+        setMoves(true);
+        setActive(true);
+        setVisible(true);
+
         // Note that the type is set to 'p'.
         setType('p');
 
