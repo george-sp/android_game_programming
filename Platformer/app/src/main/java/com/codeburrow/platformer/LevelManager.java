@@ -47,11 +47,20 @@ public class LevelManager {
 
         // Load all the GameObjects and Bitmaps.
         loadMapData(context, pixelsPerMetre, px, py);
-
-        // Ready to play
-        playing = true;
     }
 
+    /**
+     * Switch the playing status between playing and not playing.
+     */
+    public void switchPlayingStatus() {
+        playing = !playing;
+        if (playing) {
+            gravity = 6;
+        } else {
+            gravity = 0;
+        }
+    }
+    
     public boolean isPlaying() {
         return playing;
     }
@@ -85,7 +94,7 @@ public class LevelManager {
     /**
      * Returns an index that matches the index of the appropriate Bitmap
      * held in the bitmapsArray.
-     * <p>
+     * <p/>
      * Only one copy of each Bitmap object is needed.
      *
      * @param blockType The block type of the tile represented by a char
@@ -158,5 +167,4 @@ public class LevelManager {
             }
         }
     }
-
 }
