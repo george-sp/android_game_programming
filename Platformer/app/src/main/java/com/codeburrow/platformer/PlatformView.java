@@ -100,6 +100,13 @@ public class PlatformView extends SurfaceView implements Runnable {
                 }
             }
         }
+
+        if (levelManager.isPlaying()) {
+            // Reset the players location as the centre of the viewport.
+            viewport.setWorldCentre(
+                    levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x,
+                    levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().y);
+        }
     }
 
     private void draw() {

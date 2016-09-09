@@ -60,7 +60,7 @@ public class LevelManager {
             gravity = 0;
         }
     }
-    
+
     public boolean isPlaying() {
         return playing;
     }
