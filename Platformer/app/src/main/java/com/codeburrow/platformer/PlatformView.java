@@ -41,8 +41,23 @@ public class PlatformView extends SurfaceView implements Runnable {
         surfaceHolder = getHolder();
         paint = new Paint();
 
-        // Initialize the viewport
+        // Initialize the viewport.
         viewport = new Viewport(screenWidth, screenHeight);
+
+        // Load the first level.
+        loadLevel("LevelCave", 15, 2);
+    }
+
+    public void loadLevel(String level, float px, float py) {
+        // Create a new LevelManager.
+        levelManager = null;
+        levelManager = new LevelManager(context, viewport.getPixelsPerMetreX(), viewport.getScreenWidth(), inputController, level, px, py);
+        // Create a new InputController.
+        inputController = new InputController(viewport.getScreenWidth(), viewport.getScreenHeight());
+        // Set the player's location as the world centre.
+        viewport.setWorldCentre(
+                levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x,
+                levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().y);
     }
 
     @Override
