@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
  */
 public abstract class GameObject {
 
+    private RectHitbox rectHitbox = new RectHitbox();
+
     private float xVelocity;
     private float yVelocity;
     final int LEFT = -1;
@@ -87,6 +89,17 @@ public abstract class GameObject {
         if (yVelocity != 0) {
             this.worldLocation.y += yVelocity / fps;
         }
+    }
+
+    public void setRectHitbox() {
+        rectHitbox.setTop(worldLocation.y);
+        rectHitbox.setLeft(worldLocation.x);
+        rectHitbox.setBottom(worldLocation.y + height);
+        rectHitbox.setRight(worldLocation.x + width);
+    }
+
+    RectHitbox getHitbox() {
+        return rectHitbox;
     }
 
     public void setBitmapName(String bitmapName) {
