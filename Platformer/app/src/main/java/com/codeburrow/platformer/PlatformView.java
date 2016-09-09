@@ -33,6 +33,7 @@ public class PlatformView extends SurfaceView implements Runnable {
     private LevelManager levelManager;
     private Viewport viewport;
     InputController inputController;
+    SoundManager soundManager;
 
     public PlatformView(Context context, int screenWidth, int screenHeight) {
         super(context);
@@ -44,6 +45,9 @@ public class PlatformView extends SurfaceView implements Runnable {
 
         // Initialize the viewport.
         viewport = new Viewport(screenWidth, screenHeight);
+
+        soundManager = new SoundManager();
+        soundManager.loadSound(context);
 
         // Load the first level.
         loadLevel("LevelCave", 15, 2);
