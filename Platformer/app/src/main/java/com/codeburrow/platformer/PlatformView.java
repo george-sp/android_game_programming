@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -149,6 +150,16 @@ public class PlatformView extends SurfaceView implements Runnable {
             // Finish editing pixels in the surface.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                levelManager.switchPlayingStatus();
+                break;
+        }
+        return true;
     }
 
     public void pause() {
