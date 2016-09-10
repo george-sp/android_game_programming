@@ -1,6 +1,7 @@
 package com.codeburrow.platformer;
 
 import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,6 @@ public class InputController {
     Rect pause;
 
     InputController(int screenWidth, int screenHeight) {
-
         // Configure the player buttons.
         int buttonWidth = screenWidth / 8;
         int buttonHeight = screenHeight / 7;
@@ -57,6 +57,78 @@ public class InputController {
         currentButtonList.add(shoot);
         currentButtonList.add(pause);
         return currentButtonList;
+    }
+
+    public void handleInput(MotionEvent motionEvent, LevelManager levelManager, SoundManager sound, Viewport viewport) {
+        int pointerCount = motionEvent.getPointerCount();
+
+        for (int i = 0; i < pointerCount; i++) {
+            int x = (int) motionEvent.getX(i);
+            int y = (int) motionEvent.getY(i);
+
+            if (levelManager.isPlaying()) {
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
+                    case MotionEvent.ACTION_DOWN:
+                        if (right.contains(x, y)) {
+                            levelManager.player.setPressingRight(true);
+                            levelManager.player.setPressingLeft(false);
+                        } else if (left.contains(x, y)) {
+                            levelManager.player.setPressingLeft(true);
+                            levelManager.player.setPressingRight(false);
+                        } else if (jump.contains(x, y)) {
+                            levelManager.player.startJump(sound);
+                        } else if (shoot.contains(x, y)) {
+                        } else if (pause.contains(x, y)) {
+                            levelManager.switchPlayingStatus();
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (right.contains(x, y)) {
+                            levelManager.player.setPressingRight(false);
+                        } else if (left.contains(x, y)) {
+                            levelManager.player.setPressingLeft(false);
+                        }
+                        break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        if (right.contains(x, y)) {
+                            levelManager.player.setPressingRight(true);
+                            levelManager.player.setPressingLeft(false);
+                        } else if (left.contains(x, y)) {
+                            levelManager.player.setPressingLeft(true);
+                            levelManager.player.setPressingRight(false);
+                        } else if (jump.contains(x, y)) {
+                            levelManager.player.startJump(sound);
+                        } else if (shoot.contains(x, y)) {
+                            //Handle shooting here
+                        } else if (pause.contains(x, y)) {
+                            levelManager.switchPlayingStatus();
+                        }
+                        break;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        if (right.contains(x, y)) {
+                            levelManager.player.setPressingRight(false);
+                        } else if (left.contains(x, y)) {
+                            levelManager.player.setPressingLeft(false);
+                        } else if (shoot.contains(x, y)) {
+                            // Handle shooting here
+                        } else if (jump.contains(x, y)) {
+                            // Handle more jumping stuff here later
+                        }
+                        break;
+                }
+            } else {
+                // Not playing.
+                // Move the viewport around to explore the map.
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (pause.contains(x, y)) {
+                            levelManager.switchPlayingStatus();
+                        }
+                        break;
+                }
+            }
+        }
     }
 
 }
