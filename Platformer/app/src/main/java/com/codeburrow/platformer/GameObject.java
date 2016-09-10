@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 
 /**
  * Manages all the game objects: enemies, props, terrain types.
- * <p/>
+ * <p>
  * (Can be extended by all different game objects.)
  */
 public abstract class GameObject {
@@ -75,7 +75,7 @@ public abstract class GameObject {
     /**
      * Uses the velocity divided by the current frames per second
      * to calculate the distance to move per frame.
-     * <p/>
+     * <p>
      * This ensures that the movement will be exactly correct,
      * regardless of the current frames per second.
      *
@@ -100,6 +100,14 @@ public abstract class GameObject {
 
     RectHitbox getHitbox() {
         return rectHitbox;
+    }
+
+    public void setWorldLocationY(float y) {
+        this.worldLocation.y = y;
+    }
+
+    public void setWorldLocationX(float x) {
+        this.worldLocation.x = x;
     }
 
     public void setBitmapName(String bitmapName) {

@@ -182,12 +182,4 @@ public class Player extends GameObject {
 
         return collided;
     }
-
-    public void setPressingRight(boolean isPressingRight) {
-        this.isPressingRight = isPressingRight;
-    }
-
-    public void setPressingLeft(boolean isPressingLeft) {
-        this.isPressingLeft = isPressingLeft;
-    }
 }
