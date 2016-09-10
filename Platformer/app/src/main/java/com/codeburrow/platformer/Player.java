@@ -190,4 +190,15 @@ public class Player extends GameObject {
     public void setPressingLeft(boolean isPressingLeft) {
         this.isPressingLeft = isPressingLeft;
     }
+
+    public void startJump(SoundManager sm) {
+        // Can't jump if falling or already jumping.
+        if (!isFalling) {
+            if (!isJumping) {
+                isJumping = true;
+                jumpTime = System.currentTimeMillis();
+                sm.playSound("jump");
+            }
+        }
+    }
 }

@@ -183,11 +183,10 @@ public class PlatformView extends SurfaceView implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                levelManager.switchPlayingStatus();
-                break;
+        if (levelManager != null) {
+            inputController.handleInput(motionEvent, levelManager, soundManager, viewport);
         }
+        //invalidate();
         return true;
     }
 
