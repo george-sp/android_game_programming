@@ -90,6 +90,28 @@ public class PlatformView extends SurfaceView implements Runnable {
                 if (!viewport.clipObjects(go.getWorldLocation().x, go.getWorldLocation().y, go.getWidth(), go.getHeight())) {
                     // Set visible flag to true.
                     go.setVisible(true);
+
+                    // Check collisions with player.
+                    int hit = levelManager.player.checkCollisions(go.getHitbox());
+                    if (hit > 0) {
+                        // Collision detected! Now deal with different types.
+                        switch (go.getType()) {
+                            default:
+                                // Probably a regular tile.
+                                if (hit == 1) {
+                                    // Left or right have collided.
+                                    levelManager.player.setxVelocity(0);
+                                    levelManager.player.setPressingRight(false);
+                                }
+                                if (hit == 2) {
+                                    // Feet have collided.
+                                    // Enables the player to jump.
+                                    levelManager.player.isFalling = false;
+                                }
+                                break;
+                        }
+                    }
+
                     if (levelManager.isPlaying()) {
                         // Run any un-clipped updates.
                         go.update(fps, levelManager.gravity);
