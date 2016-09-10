@@ -19,6 +19,7 @@ public class Grass extends GameObject {
 
         // Where does the tile start: x and y locations from constructor parameters.
         setWorldLocation(worldStartX, worldStartY, 0);
+        setRectHitbox();
     }
 
     public void update(long fps, float gravity) {

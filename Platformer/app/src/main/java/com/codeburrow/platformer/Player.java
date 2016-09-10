@@ -7,6 +7,11 @@ import android.content.Context;
  */
 public class Player extends GameObject {
 
+    // Four hit-boxes: head, feet, left hand, right hand
+    RectHitbox rectHitboxFeet;
+    RectHitbox rectHitboxHead;
+    RectHitbox rectHitboxLeft;
+    RectHitbox rectHitboxRight;
     // How fast the player can move.
     final float MAX_X_VELOCITY = 10;
     // Indicate if the player is moving to the left or right, falling or jumping.
@@ -57,6 +62,11 @@ public class Player extends GameObject {
 
         // The x and y coordinates.
         setWorldLocation(worldStartX, worldStartY, 0);
+
+        rectHitboxFeet = new RectHitbox();
+        rectHitboxHead = new RectHitbox();
+        rectHitboxLeft = new RectHitbox();
+        rectHitboxRight = new RectHitbox();
     }
 
     public void update(long fps, float gravity) {
@@ -101,5 +111,35 @@ public class Player extends GameObject {
 
         // Update the x and y coordinates.
         this.move(fps);
+
+        // Update all the hit-boxes to the new location.
+        // Get the current world location of the player and save them as local variables to be used next.
+        Vector2Point location = getWorldLocation();
+        float lx = location.x;
+        float ly = location.y;
+
+        // Update the player feet hit-box.
+        rectHitboxFeet.top = ly + (getHeight() * .95f);
+        rectHitboxFeet.left = lx + getWidth() * .2f;
+        rectHitboxFeet.bottom = ly + getHeight() * .98f;
+        rectHitboxFeet.right = lx + getWidth() * .8f;
+
+        // Update player head hit-box.
+        rectHitboxHead.top = ly;
+        rectHitboxHead.left = lx + (getWidth() * .4f);
+        rectHitboxHead.bottom = ly + getHeight() * .2f;
+        rectHitboxHead.right = lx + (getWidth() * .6f);
+
+        // Update player left hit-box.
+        rectHitboxLeft.top = ly + getHeight() * .2f;
+        rectHitboxLeft.left = lx + getWidth() * .2f;
+        rectHitboxLeft.bottom = ly + getHeight() * .8f;
+        rectHitboxLeft.right = lx + (getWidth() * .3f);
+
+        // Update player right hit-box.
+        rectHitboxRight.top = ly + getHeight() * .2f;
+        rectHitboxRight.left = lx + (getWidth() * .8f);
+        rectHitboxRight.bottom = ly + getHeight() * .8f;
+        rectHitboxRight.right = lx + getWidth() * .7f;
     }
 }
