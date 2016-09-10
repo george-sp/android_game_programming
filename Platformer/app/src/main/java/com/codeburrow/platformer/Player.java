@@ -142,4 +142,52 @@ public class Player extends GameObject {
         rectHitboxRight.bottom = ly + getHeight() * .8f;
         rectHitboxRight.right = lx + getWidth() * .7f;
     }
+
+    /**
+     * Check for collisions and react to them.
+     *
+     * @param rectHitbox The RectHitBox of whichever object we are currently checking against for collision.
+     * @return An int to represent if there was a collision and where on the player that collision occurred.
+     */
+    public int checkCollisions(RectHitbox rectHitbox) {
+        int collided = 0;//no collision
+
+        // Check the left side.
+        if (this.rectHitboxLeft.intersects(rectHitbox)) {
+            // Left has collided, move player just to right of current hit-box.
+            this.setWorldLocationX(rectHitbox.right - getWidth() * .2f);
+            collided = 1;
+        }
+
+        // Check the right side.
+        if (this.rectHitboxRight.intersects(rectHitbox)) {
+            // Right has collided, move player just to left of current hit-box.
+            this.setWorldLocationX(rectHitbox.left - getWidth() * .8f);
+            collided = 1;
+        }
+
+        // Check the feet.
+        if (this.rectHitboxFeet.intersects(rectHitbox)) {
+            // Feet have collided, move feet to just above current hit-box.
+            this.setWorldLocationY(rectHitbox.top - getHeight());
+            collided = 2;
+        }
+
+        // Check the head.
+        if (this.rectHitboxHead.intersects(rectHitbox)) {
+            // Head has collided, move head to just below current hitbox bottom
+            this.setWorldLocationY(rectHitbox.bottom);
+            collided = 3;
+        }
+
+        return collided;
+    }
+
+    public void setPressingRight(boolean isPressingRight) {
+        this.isPressingRight = isPressingRight;
+    }
+
+    public void setPressingLeft(boolean isPressingLeft) {
+        this.isPressingLeft = isPressingLeft;
+    }
 }
