@@ -5,10 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
 
 /**
  * The PlatformActivity's view == The game's view.
@@ -174,6 +177,16 @@ public class PlatformView extends SurfaceView implements Runnable {
                 canvas.drawText("Y velocity:" + levelManager.gameObjects.get(levelManager.playerIndex).getyVelocity(), 10, 200, paint);
                 // Reset the number of clipped objects.
                 viewport.resetNumClipped();
+            }
+
+            // Draw the buttons.
+            paint.setColor(Color.argb(80, 255, 255, 255));
+            ArrayList<Rect> buttonsToDraw;
+            buttonsToDraw = inputController.getButtons();
+
+            for (Rect rect : buttonsToDraw) {
+                RectF rf = new RectF(rect.left, rect.top, rect.right, rect.bottom);
+                canvas.drawRoundRect(rf, 15f, 15f, paint);
             }
 
             // Finish editing pixels in the surface.
