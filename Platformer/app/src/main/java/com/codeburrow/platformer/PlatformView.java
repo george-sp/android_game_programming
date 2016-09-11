@@ -189,6 +189,14 @@ public class PlatformView extends SurfaceView implements Runnable {
                 canvas.drawRoundRect(rf, 15f, 15f, paint);
             }
 
+            // Draw the paused text.
+            if (!this.levelManager.isPlaying()) {
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                paint.setTextSize(120);
+                canvas.drawText("Paused", viewport.getScreenWidth() / 2, viewport.getScreenHeight() / 2, paint);
+            }
+
             // Finish editing pixels in the surface.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
