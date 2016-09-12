@@ -7,7 +7,11 @@ import android.content.Context;
  */
 public class Player extends GameObject {
 
-    // Four hit-boxes: head, feet, left hand, right hand
+    // Specific required number of frames and frames per second.
+    final int ANIMATION_FPS = 16;
+    final int ANIMATION_FRAME_COUNT = 5;
+
+    // Four hit-boxes: head, feet, left hand, right hand.
     RectHitbox rectHitboxFeet;
     RectHitbox rectHitboxHead;
     RectHitbox rectHitboxLeft;
@@ -59,6 +63,11 @@ public class Player extends GameObject {
          * So it will look silly until we animate it
          */
         setBitmapName("player");
+
+        // Set this object up to be animated.
+        setAnimFps(ANIMATION_FPS);
+        setAnimFrameCount(ANIMATION_FRAME_COUNT);
+        setAnimated(context, pixelsPerMetre, true);
 
         // The x and y coordinates.
         setWorldLocation(worldStartX, worldStartY, 0);
