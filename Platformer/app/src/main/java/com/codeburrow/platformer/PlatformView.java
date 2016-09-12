@@ -161,6 +161,7 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 go.getHeight()));
 
                         if (go.isAnimated()) {
+                            Log.e(LOG_TAG, "animated");
                             // Get the next frame of the bitmap.
                             if (go.getFacing() == 1) {
                                 // Rotate if necessary.
@@ -177,7 +178,6 @@ public class PlatformView extends SurfaceView implements Runnable {
                                         true);
 
                                 canvas.drawBitmap(bitmap, toScreen2d.left, toScreen2d.top, paint);
-
                             } else {
                                 // Draw it the regular way round.
                                 canvas.drawBitmap(levelManager.bitmapsArray[levelManager.getBitmapIndex(go.getType())], go.getRectToDraw(System.currentTimeMillis()), toScreen2d, paint);
