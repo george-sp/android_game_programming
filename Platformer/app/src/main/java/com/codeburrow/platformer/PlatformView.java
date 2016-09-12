@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class PlatformView extends SurfaceView implements Runnable {
     private Viewport viewport;
     InputController inputController;
     SoundManager soundManager;
+    private PlayerState playerState;
 
     public PlatformView(Context context, int screenWidth, int screenHeight) {
         super(context);
@@ -55,6 +57,8 @@ public class PlatformView extends SurfaceView implements Runnable {
         soundManager = new SoundManager();
         soundManager.loadSound(context);
 
+        playerState = new PlayerState();
+
         // Load the first level.
         loadLevel("LevelCave", 15, 2);
     }
@@ -65,6 +69,8 @@ public class PlatformView extends SurfaceView implements Runnable {
         levelManager = new LevelManager(context, viewport.getPixelsPerMetreX(), viewport.getScreenWidth(), inputController, level, px, py);
         // Create a new InputController.
         inputController = new InputController(viewport.getScreenWidth(), viewport.getScreenHeight());
+        // Store the player starting(respawn) location.
+        PointF respawnLocation = new PointF(px, py);
         // Set the player's location as the world centre.
         viewport.setWorldCentre(
                 levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x,
