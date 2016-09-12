@@ -161,7 +161,6 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 go.getHeight()));
 
                         if (go.isAnimated()) {
-                            Log.e(LOG_TAG, "animated");
                             // Get the next frame of the bitmap.
                             if (go.getFacing() == 1) {
                                 // Rotate if necessary.
@@ -191,12 +190,12 @@ public class PlatformView extends SurfaceView implements Runnable {
 
             // Draw the bullets.
             paint.setColor(Color.argb(255, 255, 255, 255));
-            for (int i = 0; i < levelManager.player.bfg.getNumBullets(); i++) {
+            for (int i = 0; i < levelManager.player.machineGun.getNumBullets(); i++) {
                 // Pass in the x and y coordinates as usual
                 // & .25f and .05f for the bullet width and height.
                 toScreen2d.set(viewport.worldToScreen
-                        (levelManager.player.bfg.getBulletX(i),
-                                levelManager.player.bfg.getBulletY(i),
+                        (levelManager.player.machineGun.getBulletX(i),
+                                levelManager.player.machineGun.getBulletY(i),
                                 .25f,
                                 .05f));
                 canvas.drawRect(toScreen2d, paint);

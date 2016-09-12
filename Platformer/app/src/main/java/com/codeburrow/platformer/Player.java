@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class Player extends GameObject {
 
-    public MachineGun bfg;
+    public MachineGun machineGun;
 
     // Specific required number of frames and frames per second.
     final int ANIMATION_FPS = 16;
@@ -44,7 +44,7 @@ public class Player extends GameObject {
         final float HEIGHT = 2;
         final float WIDTH = 1;
 
-        bfg = new MachineGun();
+        machineGun = new MachineGun();
 
         setHeight(HEIGHT); // 2 metre tall.
         setWidth(WIDTH); // 1 metre wide.
@@ -123,7 +123,7 @@ public class Player extends GameObject {
         }
 
         // Update the machine-gun.
-        bfg.update(fps, gravity);
+        machineGun.update(fps, gravity);
 
         // Update the x and y coordinates.
         this.move(fps);
@@ -165,7 +165,7 @@ public class Player extends GameObject {
      * @return True, if a shot was fired.
      */
     public boolean pullTrigger() {
-        return bfg.shoot(this.getWorldLocation().x, this.getWorldLocation().y, getFacing(), getHeight());
+        return machineGun.shoot(this.getWorldLocation().x, this.getWorldLocation().y, getFacing(), getHeight());
     }
 
     /**
