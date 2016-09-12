@@ -41,7 +41,6 @@ public class Animation {
                 frameTicker = time;
                 currentFrame++;
                 if (currentFrame >= frameCount) {
-                    //if (currentFrame >= frameCount) {
                     currentFrame = 0;
                 }
             }

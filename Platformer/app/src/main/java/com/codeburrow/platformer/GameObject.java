@@ -3,6 +3,7 @@ package com.codeburrow.platformer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 /**
  * Manages all the game objects: enemies, props, terrain types.
@@ -10,6 +11,10 @@ import android.graphics.BitmapFactory;
  * (Can be extended by all different game objects.)
  */
 public abstract class GameObject {
+
+    private Animation anim = null;
+    private boolean animated;
+    private int animFps = 1;
 
     private RectHitbox rectHitbox = new RectHitbox();
 
@@ -34,6 +39,33 @@ public abstract class GameObject {
     private String bitmapName;
 
     public abstract void update(long fps, float gravity);
+
+    public void setAnimFps(int animFps) {
+        this.animFps = animFps;
+    }
+
+    public void setAnimFrameCount(int animFrameCount) {
+        this.animFrameCount = animFrameCount;
+    }
+
+    public boolean isAnimated() {
+        return animated;
+    }
+
+    public void setAnimated(Context context, int pixelsPerMetre, boolean animated) {
+        this.animated = animated;
+        this.anim = new Animation(context,
+                bitmapName,
+                height,
+                width,
+                animFps,
+                animFrameCount,
+                pixelsPerMetre);
+    }
+
+    public Rect getRectToDraw(long deltaTime) {
+        return anim.getCurrentFrame(deltaTime, xVelocity, isMoves());
+    }
 
     public String getBitmapName() {
         return bitmapName;
