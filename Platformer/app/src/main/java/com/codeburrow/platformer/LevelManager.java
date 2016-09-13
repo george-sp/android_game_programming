@@ -162,7 +162,6 @@ public class LevelManager {
 
         for (int i = 0; i < levelData.tiles.size(); i++) {
             for (int j = 0; j < levelData.tiles.get(i).length(); j++) {
-
                 c = levelData.tiles.get(i).charAt(j);
                 // Check if there is an empty space.
                 if (c != '.') {
