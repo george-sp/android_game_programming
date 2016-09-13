@@ -93,6 +93,9 @@ public class LevelManager {
             case 'e':
                 index = 5;
                 break;
+            case 'd':
+                index = 6;
+                break;
             default:
                 index = 0;
                 break;
@@ -129,6 +132,9 @@ public class LevelManager {
                 break;
             case 'e':
                 index = 5;
+                break;
+            case 'd':
+                index = 6;
                 break;
             default:
                 index = 0;
@@ -174,7 +180,6 @@ public class LevelManager {
                             playerIndex = currentIndex;
                             // We want a reference to the player object
                             player = (Player) gameObjects.get(playerIndex);
-
                             break;
                         case 'c':
                             // Add a coin to the gameObjects.
@@ -187,6 +192,10 @@ public class LevelManager {
                         case 'e':
                             // Add an extra life to the gameObjects.
                             gameObjects.add(new ExtraLife(j, i, c));
+                            break;
+                        case 'd':
+                            // Add a drone to the gameObjects.
+                            gameObjects.add(new Drone(j, i, c));
                             break;
                     }
                 }
