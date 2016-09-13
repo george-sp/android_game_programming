@@ -140,6 +140,16 @@ public class PlatformView extends SurfaceView implements Runnable {
                                     levelManager.player.restorePreviousVelocity();
                                 }
                                 break;
+                            case 'd':
+                                // Hit by drone.
+                                PointF location;
+                                soundManager.playSound("player_burn");
+                                playerState.loseLife();
+                                location = new PointF(playerState.loadLocation().x, playerState.loadLocation().y);
+                                levelManager.player.setWorldLocationX(location.x);
+                                levelManager.player.setWorldLocationY(location.y);
+                                levelManager.player.setxVelocity(0);
+                                break;
                             default:
                                 // Probably a regular tile.
                                 if (hit == 1) {
@@ -159,6 +169,12 @@ public class PlatformView extends SurfaceView implements Runnable {
                     if (levelManager.isPlaying()) {
                         // Run any un-clipped updates.
                         go.update(fps, levelManager.gravity);
+
+                        if (go.getType() == 'd') {
+                            // Let any nearby drones know where the player is.
+                            Drone d = (Drone) go;
+                            d.setWaypoint(levelManager.player.getWorldLocation());
+                        }
                     }
                 } else {
                     // Set visible flag to false.
