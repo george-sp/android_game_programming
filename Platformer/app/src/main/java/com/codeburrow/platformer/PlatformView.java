@@ -107,6 +107,39 @@ public class PlatformView extends SurfaceView implements Runnable {
                     if (hit > 0) {
                         // Collision detected! Now deal with different types.
                         switch (go.getType()) {
+                            case 'c':
+                                soundManager.playSound("coin_pickup");
+                                go.setActive(false);
+                                go.setVisible(false);
+                                playerState.gotCredit();
+                                if (hit != 2) {
+                                    // Any hit except feet.
+                                    // Now restore velocity that was removed by collision detection.
+                                    levelManager.player.restorePreviousVelocity();
+                                }
+                                break;
+                            case 'u':
+                                soundManager.playSound("gun_upgrade");
+                                go.setActive(false);
+                                go.setVisible(false);
+                                levelManager.player.bfg.upgradeRateOfFire();
+                                if (hit != 2) {
+                                    // Any hit except feet.
+                                    // Now restore velocity that was removed by collision detection.
+                                    levelManager.player.restorePreviousVelocity();
+                                }
+                                break;
+                            case 'e':
+                                go.setActive(false);
+                                go.setVisible(false);
+                                soundManager.playSound("extra_life");
+                                playerState.addLife();
+                                if (hit != 2) {
+                                    // Any hit except feet.
+                                    // Now restore velocity that was removed by collision detection.
+                                    levelManager.player.restorePreviousVelocity();
+                                }
+                                break;
                             default:
                                 // Probably a regular tile.
                                 if (hit == 1) {

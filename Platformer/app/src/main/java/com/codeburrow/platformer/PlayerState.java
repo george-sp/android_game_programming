@@ -45,11 +45,11 @@ public class PlayerState {
     }
 
     public int getFireRate() {
-        return mgFireRate;
+        return machineGunFireRate;
     }
 
     public void increaseFireRate() {
-        mgFireRate += 2;
+        machineGunFireRate += 2;
     }
 
 

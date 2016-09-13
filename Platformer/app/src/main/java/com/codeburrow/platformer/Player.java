@@ -208,6 +208,24 @@ public class Player extends GameObject {
         return collided;
     }
 
+    /**
+     * Helper Method
+     * <p/>
+     * Restores the velocity of the Player.
+     * It is called when a collision is detected with a pickup, not a solid object.
+     */
+    public void restorePreviousVelocity() {
+        if (!isJumping && !isFalling) {
+            if (getFacing() == LEFT) {
+                isPressingLeft = true;
+                setxVelocity(-MAX_X_VELOCITY);
+            } else {
+                isPressingRight = true;
+                setxVelocity(MAX_X_VELOCITY);
+            }
+        }
+    }
+
     public void setPressingRight(boolean isPressingRight) {
         this.isPressingRight = isPressingRight;
     }
