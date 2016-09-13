@@ -122,7 +122,7 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 soundManager.playSound("gun_upgrade");
                                 go.setActive(false);
                                 go.setVisible(false);
-                                levelManager.player.bfg.upgradeRateOfFire();
+                                levelManager.player.machineGun.upgradeRateOfFire();
                                 if (hit != 2) {
                                     // Any hit except feet.
                                     // Now restore velocity that was removed by collision detection.
