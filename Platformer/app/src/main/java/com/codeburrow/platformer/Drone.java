@@ -4,6 +4,8 @@ import android.graphics.PointF;
 
 /**
  * A simple but evil enemy.
+ * It detects the player when it is within the viewport and fly straight at him.
+ * If the drone touches the player, death is immediate.
  */
 public class Drone extends GameObject {
 
