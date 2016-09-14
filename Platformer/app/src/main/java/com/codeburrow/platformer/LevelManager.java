@@ -155,6 +155,9 @@ public class LevelManager {
             case 'g':
                 index = 7;
                 break;
+            case 'f':
+                index = 8;
+                break;
             default:
                 index = 0;
                 break;
@@ -165,7 +168,7 @@ public class LevelManager {
     /**
      * Returns an index that matches the index of the appropriate Bitmap
      * held in the bitmapsArray.
-     * <p>
+     * <p/>
      * Only one copy of each Bitmap object is needed.
      *
      * @param blockType The block type of the tile represented by a char
@@ -197,6 +200,9 @@ public class LevelManager {
                 break;
             case 'g':
                 index = 7;
+                break;
+            case 'f':
+                index = 8;
                 break;
             default:
                 index = 0;
@@ -259,6 +265,10 @@ public class LevelManager {
                         case 'g':
                             // Add a guard to the gameObjects.
                             gameObjects.add(new Guard(context, j, i, c, pixelsPerMetre));
+                            break;
+                        case 'f':
+                            // Add a fire tile the gameObjects.
+                            gameObjects.add(new Fire(context, j, i, c, pixelsPerMetre));
                             break;
                     }
                 }
