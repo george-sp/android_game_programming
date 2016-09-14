@@ -96,6 +96,9 @@ public class LevelManager {
             case 'd':
                 index = 6;
                 break;
+            case 'g':
+                index = 7;
+                break;
             default:
                 index = 0;
                 break;
@@ -106,7 +109,7 @@ public class LevelManager {
     /**
      * Returns an index that matches the index of the appropriate Bitmap
      * held in the bitmapsArray.
-     * <p/>
+     * <p>
      * Only one copy of each Bitmap object is needed.
      *
      * @param blockType The block type of the tile represented by a char
@@ -135,6 +138,9 @@ public class LevelManager {
                 break;
             case 'd':
                 index = 6;
+                break;
+            case 'g':
+                index = 7;
                 break;
             default:
                 index = 0;
@@ -173,9 +179,7 @@ public class LevelManager {
                             break;
                         case 'p':// a player
                             // Add a player to the gameObjects.
-                            gameObjects.add(new Player
-                                    (context, px, py, pixelsPerMetre));
-
+                            gameObjects.add(new Player(context, px, py, pixelsPerMetre));
                             playerIndex = currentIndex;
                             // We want a reference to the player object
                             player = (Player) gameObjects.get(playerIndex);
@@ -195,6 +199,10 @@ public class LevelManager {
                         case 'd':
                             // Add a drone to the gameObjects.
                             gameObjects.add(new Drone(j, i, c));
+                            break;
+                        case 'g':
+                            // Add a guard to the gameObjects.
+                            gameObjects.add(new Guard(context, j, i, c, pixelsPerMetre));
                             break;
                     }
                 }
