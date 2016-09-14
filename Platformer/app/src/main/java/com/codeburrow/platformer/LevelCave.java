@@ -10,6 +10,11 @@ import java.util.ArrayList;
  */
 public class LevelCave extends LevelData {
 
+    /*
+     * The guards 'g' should be placed with one space above the platform
+     * and five traversable tiles either side.
+     */
+
     public LevelCave() {
         tiles = new ArrayList<>();
         this.tiles.add("p.............................................");
@@ -19,10 +24,10 @@ public class LevelCave extends LevelData {
         this.tiles.add("....................c.........................");
         this.tiles.add("....................1........u.........d......");
         this.tiles.add(".................c..........u1................");
-        this.tiles.add("......d..........1.........u1.........d.......");
+        this.tiles.add(".................1.........u1.........d.......");
         this.tiles.add("..............c...........u1..................");
-        this.tiles.add(".d............1..........u1...................");
+        this.tiles.add("..............1....g.....u1...........g.......");
         this.tiles.add("......................e..1....e.....e.........");
-        this.tiles.add("....11111111111111111111111111111111111111....");
+        this.tiles.add("....1111111111111111111111111111111111111111..");
     }
 }
