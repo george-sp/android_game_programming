@@ -6,6 +6,8 @@ package com.codeburrow.platformer;
 public class Grass extends GameObject {
 
     public Grass(float worldStartX, float worldStartY, char type) {
+        setTraversable();
+
         final float HEIGHT = 1;
         final float WIDTH = 1;
 
