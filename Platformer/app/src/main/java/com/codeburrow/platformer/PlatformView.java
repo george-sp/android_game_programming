@@ -175,6 +175,37 @@ public class PlatformView extends SurfaceView implements Runnable {
                         }
                     }
 
+                    // Check bullet collisions.
+                    for (int i = 0; i < levelManager.player.machineGun.getNumBullets(); i++) {
+                        //Make a hit-box out of the the current bullet.
+                        RectHitbox r = new RectHitbox();
+                        r.setLeft(levelManager.player.machineGun.getBulletX(i));
+                        r.setTop(levelManager.player.machineGun.getBulletY(i));
+                        r.setRight(levelManager.player.machineGun.getBulletX(i) + .1f);
+                        r.setBottom(levelManager.player.machineGun.getBulletY(i) + .1f);
+
+                        if (go.getHitbox().intersects(r)) {
+                            /*
+                             * Collision detected:
+                             * make bullet disappear until it is respawned as a new bullet
+                             */
+                            levelManager.player.machineGun.hideBullet(i);
+                            // Now respond depending upon the type of object hit.
+                            if (go.getType() != 'g' && go.getType() != 'd') {
+                                soundManager.playSound("ricochet");
+                            } else if (go.getType() == 'g') {
+                                // Knock the guard back.
+                                go.setWorldLocationX(go.getWorldLocation().x + 2 * (levelManager.player.machineGun.getDirection(i)));
+                                soundManager.playSound("hit_guard");
+                            } else if (go.getType() == 'd') {
+                                // Destroy the droid.
+                                soundManager.playSound("explode");
+                                // Permanently clip this drone.
+                                go.setWorldLocation(-100, -100, 0);
+                            }
+                        }
+                    }
+
                     if (levelManager.isPlaying()) {
                         // Run any un-clipped updates.
                         go.update(fps, levelManager.gravity);
