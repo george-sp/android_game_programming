@@ -150,6 +150,15 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 levelManager.player.setWorldLocationY(location.y);
                                 levelManager.player.setxVelocity(0);
                                 break;
+                            case 'g':
+                                // Hit by guard.
+                                soundManager.playSound("player_burn");
+                                playerState.loseLife();
+                                location = new PointF(playerState.loadLocation().x, playerState.loadLocation().y);
+                                levelManager.player.setWorldLocationX(location.x);
+                                levelManager.player.setWorldLocationY(location.y);
+                                levelManager.player.setxVelocity(0);
+                                break;
                             default:
                                 // Probably a regular tile.
                                 if (hit == 1) {
