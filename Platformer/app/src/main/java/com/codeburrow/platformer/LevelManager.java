@@ -47,6 +47,62 @@ public class LevelManager {
 
         // Load all the GameObjects and Bitmaps.
         loadMapData(context, pixelsPerMetre, px, py);
+
+        // Set waypoints for our guards.
+        setWaypoints();
+    }
+
+    public void setWaypoints() {
+        // Loop through all game objects looking for Guards.
+        for (GameObject guard : this.gameObjects) {
+            if (guard.getType() == 'g') {
+                /*
+                 * Set the waypoints for this guard.
+                 * Find the tile which the guard is standing on.
+                 * Calculate the coordinates of the last traversable tile on either side
+                 * but with a maximum range of five tiles each way.
+                 * These will be the two waypoints.
+                 */
+                int startTileIndex = -1;
+                int startGuardIndex = 0;
+                float waypointX1 = -1;
+                float waypointX2 = -1;
+
+                for (GameObject tile : this.gameObjects) {
+                    startTileIndex++;
+                    if (tile.getWorldLocation().y == guard.getWorldLocation().y + 2) {
+                        // Tile is two spaces below current guard.
+                        if (tile.getWorldLocation().x == guard.getWorldLocation().x) {
+                            // The loop for the left waypoint.
+                            for (int i = 0; i < 5; i++) {
+                                if (!gameObjects.get(startTileIndex - i).isTraversable()) {
+                                    //set the left waypoint
+                                    waypointX1 = gameObjects.get(startTileIndex - (i + 1)).getWorldLocation().x;
+                                    break;// Leave left for loop
+                                } else {
+                                    //set to max 5 tiles as no non traversible tile found
+                                    waypointX1 = gameObjects.get(startTileIndex - 5).getWorldLocation().x;
+                                }
+                            }
+                            // The loop for the right waypoint.
+                            for (int i = 0; i < 5; i++) {
+                                if (!gameObjects.get(startTileIndex + i).isTraversable()) {
+                                    //set the right waypoint
+                                    waypointX2 = gameObjects.get(startTileIndex + (i - 1)).getWorldLocation().x;
+                                    break;// Leave right for loop
+                                } else {
+                                    //set to max 5 tiles away
+                                    waypointX2 = gameObjects.get(startTileIndex + 5).getWorldLocation().x;
+                                }
+                            }
+
+                            Guard g = (Guard) guard;
+                            g.setWaypoints(waypointX1, waypointX2);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
