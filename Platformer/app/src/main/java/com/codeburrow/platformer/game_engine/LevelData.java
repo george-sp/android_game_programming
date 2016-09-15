@@ -1,15 +1,18 @@
 package com.codeburrow.platformer.game_engine;
 
+import com.codeburrow.platformer.background.BackgroundData;
+
 import java.util.ArrayList;
 
 /**
  * Holds the data for the game level.
- * <p>
+ * <p/>
  * (Extend it each time a new level design is created.)
  */
 public class LevelData {
 
     public ArrayList<String> tiles;
+    public ArrayList<BackgroundData> backgroundDataList;
 
     /*
      * Tile types
