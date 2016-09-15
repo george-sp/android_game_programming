@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
+import com.codeburrow.platformer.background.Background;
+import com.codeburrow.platformer.background.BackgroundData;
 import com.codeburrow.platformer.enemy.Drone;
 import com.codeburrow.platformer.enemy.Guard;
 import com.codeburrow.platformer.levels.LevelCave;
@@ -50,6 +52,7 @@ public class LevelManager {
     LevelData levelData;
     // All the game objects
     ArrayList<GameObject> gameObjects;
+    ArrayList<Background> backgrounds;
     // Representations of the player control buttons
     ArrayList<Rect> currentButtons;
     // All the needed bitmaps
@@ -70,9 +73,19 @@ public class LevelManager {
 
         // Load all the GameObjects and Bitmaps.
         loadMapData(context, pixelsPerMetre, px, py);
+        loadBackgrounds(context, pixelsPerMetre, screenWidth);
 
         // Set waypoints for our guards.
         setWaypoints();
+    }
+
+    private void loadBackgrounds(Context context, int pixelsPerMetre, int screenWidth) {
+        backgrounds = new ArrayList<>();
+        // Load the background data into the Background objects and
+        // place them in our GameObject array list.
+        for (BackgroundData bgData : levelData.backgroundDataList) {
+            backgrounds.add(new Background(context, pixelsPerMetre, screenWidth, bgData));
+        }
     }
 
     public void setWaypoints() {
