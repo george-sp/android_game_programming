@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 
+import com.codeburrow.platformer.game_engine.PlatformView;
+
 public class PlatformActivity extends AppCompatActivity {
 
     // An object to handle the View.
