@@ -12,21 +12,21 @@ import android.graphics.Matrix;
  */
 public class Background {
 
-    Bitmap bitmap;
-    Bitmap bitmapReversed;
+    public Bitmap bitmap;
+    public Bitmap bitmapReversed;
 
-    int width;
-    int height;
+    public int width;
+    public int height;
 
-    boolean reversedFirst;
+    public boolean reversedFirst;
 
     // Controls where we clip the bitmaps each frame.
-    int xClip;
-    float y;
-    float endY;
-    int z;
+    public int xClip;
+    public float y;
+    public float endY;
+    public int z;
 
-    float speed;
+    public float speed;
 
     boolean isParallax;
 

@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.codeburrow.platformer.background.Background;
 import com.codeburrow.platformer.enemy.Drone;
 import com.codeburrow.platformer.player.PlayerState;
 
@@ -251,6 +252,9 @@ public class PlatformView extends SurfaceView implements Runnable {
             paint.setColor(Color.argb(255, 0, 0, 255));
             canvas.drawColor(Color.argb(255, 0, 0, 255));
 
+            // Draw parallax backgrounds from -1 to -3.
+            drawBackground(0, -3);
+
             // Draw all the GameObjects.
             Rect toScreen2d = new Rect();
             // Draw a layer at a time.
@@ -307,6 +311,9 @@ public class PlatformView extends SurfaceView implements Runnable {
                 canvas.drawRect(toScreen2d, paint);
             }
 
+            // Draw parallax backgrounds from layer 1 to 3.
+            drawBackground(4, 0);
+
             // Draw some debugging info.
             if (debugging) {
                 paint.setTextSize(16);
@@ -344,6 +351,63 @@ public class PlatformView extends SurfaceView implements Runnable {
 
             // Finish editing pixels in the surface.
             surfaceHolder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    private void drawBackground(int start, int stop) {
+        // Hold the start and end points of bitmap and reversedBitmap.
+        Rect fromRect1 = new Rect();
+        Rect toRect1 = new Rect();
+        Rect fromRect2 = new Rect();
+        Rect toRect2 = new Rect();
+
+        /*
+         * Loop through all our backgrounds using the start and stop parameters
+         * to decide which backgrounds have a z layer
+         * that we are currently interested in drawing.
+         */
+        for (Background bg : levelManager.backgrounds) {
+            if (bg.z < start && bg.z > stop) {
+                // Is this layer in the viewport?
+                // Clip anything off-screen.
+                if (!viewport.clipObjects(-1, bg.y, 1000, bg.height)) {
+                    float floatstartY = ((viewport.getyCentre() - ((viewport.getViewportWorldCentreY() - bg.y) * viewport.getPixelsPerMetreY())));
+                    int startY = (int) floatstartY;
+
+                    float floatendY = ((viewport.getyCentre() - ((viewport.getViewportWorldCentreY() - bg.endY) * viewport.getPixelsPerMetreY())));
+                    int endY = (int) floatendY;
+
+                    // Define what portion of bitmaps to capture and what coordinates to draw them at.
+                    fromRect1 = new Rect(0, 0, bg.width - bg.xClip, bg.height);
+                    toRect1 = new Rect(bg.xClip, startY, bg.width, endY);
+
+                    fromRect2 = new Rect(bg.width - bg.xClip, 0, bg.width, bg.height);
+                    toRect2 = new Rect(0, startY, bg.xClip, endY);
+                }
+
+                // Draw backgrounds.
+                if (!bg.reversedFirst) {
+
+                    canvas.drawBitmap(bg.bitmap, fromRect1, toRect1, paint);
+                    canvas.drawBitmap(bg.bitmapReversed, fromRect2, toRect2, paint);
+                } else {
+                    canvas.drawBitmap(bg.bitmap, fromRect2, toRect2, paint);
+                    canvas.drawBitmap(bg.bitmapReversed, fromRect1, toRect1, paint);
+                }
+
+                // Scroll along based on player's speed and direction.
+                bg.xClip -= levelManager.player.getxVelocity() / (20 / bg.speed);
+                // If xClip has reached the end of the current first background,
+                // simply set xClip to zero and change which bitmap is shown first.
+                if (bg.xClip >= bg.width) {
+                    bg.xClip = 0;
+                    bg.reversedFirst = !bg.reversedFirst;
+                } else if (bg.xClip <= 0) {
+                    bg.xClip = bg.width;
+                    bg.reversedFirst = !bg.reversedFirst;
+
+                }
+            }
         }
     }
 

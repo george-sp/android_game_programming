@@ -59,6 +59,18 @@ public class Viewport {
         return pixelsPerMetreX;
     }
 
+    public int getPixelsPerMetreY() {
+        return pixelsPerMetreY;
+    }
+
+    public int getyCentre() {
+        return screenCentreY;
+    }
+
+    public float getViewportWorldCentreY() {
+        return currentViewportWorldCentre.y;
+    }
+
     /**
      * Converts the locations of all the objects currently in the visible viewport
      * from world coordinates to pixel coordinates that can actually be drawn to the screen.
