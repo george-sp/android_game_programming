@@ -42,8 +42,7 @@ public class Viewport {
     }
 
     public void moveViewportRight(int maxWidth) {
-        if (currentViewportWorldCentre.x < maxWidth -
-                (metresToShowX / 2) + 3) {
+        if (currentViewportWorldCentre.x < maxWidth - (metresToShowX / 2) + 3) {
             currentViewportWorldCentre.x += 1;
         }
     }
@@ -61,8 +60,7 @@ public class Viewport {
     }
 
     public void moveViewportDown(int maxHeight) {
-        if (currentViewportWorldCentre.y <
-                maxHeight - (metresToShowY / 2) + 3) {
+        if (currentViewportWorldCentre.y < maxHeight - (metresToShowY / 2) + 3) {
             currentViewportWorldCentre.y += 1;
         }
     }

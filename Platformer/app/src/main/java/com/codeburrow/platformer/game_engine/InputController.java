@@ -127,7 +127,15 @@ public class InputController {
                 // Move the viewport around to explore the map.
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        if (pause.contains(x, y)) {
+                        if (right.contains(x, y)) {
+                            viewport.moveViewportRight(levelManager.mapWidth);
+                        } else if (left.contains(x, y)) {
+                            viewport.moveViewportLeft();
+                        } else if (jump.contains(x, y)) {
+                            viewport.moveViewportUp();
+                        } else if (shoot.contains(x, y)) {
+                            viewport.moveViewportDown(levelManager.mapHeight);
+                        } else if (pause.contains(x, y)) {
                             levelManager.switchPlayingStatus();
                         }
                         break;
