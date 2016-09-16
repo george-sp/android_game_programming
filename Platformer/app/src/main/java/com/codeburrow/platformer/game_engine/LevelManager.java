@@ -437,10 +437,9 @@ public class LevelManager {
                             gameObjects.add(new Boulders(j, i, c));
                             break;
                     }
-                }
-
-                if (bitmapsArray[getBitmapIndex(c)] == null) {
-                    bitmapsArray[getBitmapIndex(c)] = gameObjects.get(currentIndex).prepareBitmap(context, gameObjects.get(currentIndex).getBitmapName(), pixelsPerMetre);
+                    if (bitmapsArray[getBitmapIndex(c)] == null) {
+                        bitmapsArray[getBitmapIndex(c)] = gameObjects.get(currentIndex).prepareBitmap(context, gameObjects.get(currentIndex).getBitmapName(), pixelsPerMetre);
+                    }
                 }
             }
         }
