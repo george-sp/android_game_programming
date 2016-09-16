@@ -241,6 +241,24 @@ public class PlatformView extends SurfaceView implements Runnable {
                     levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x,
                     levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().y);
         }
+
+        // Has player fallen out of the map?
+        if (levelManager.player.getWorldLocation().x < 0 ||
+                levelManager.player.getWorldLocation().x > levelManager.mapWidth ||
+                levelManager.player.getWorldLocation().y > levelManager.mapHeight) {
+            soundManager.playSound("player_burn");
+            playerState.loseLife();
+            PointF location = new PointF(playerState.loadLocation().x, playerState.loadLocation().y);
+            levelManager.player.setWorldLocationX(location.x);
+            levelManager.player.setWorldLocationY(location.y);
+            levelManager.player.setxVelocity(0);
+        }
+
+        // Check if game is over.
+        if (playerState.getLives() == 0) {
+            playerState = new PlayerState();
+            loadLevel("LevelCave", 1, 16);
+        }
     }
 
     private void draw() {
