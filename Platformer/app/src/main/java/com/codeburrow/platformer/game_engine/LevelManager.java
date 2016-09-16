@@ -65,6 +65,15 @@ public class LevelManager {
             case "LevelCave":
                 levelData = new LevelCave();
                 break;
+            case "LevelCity":
+                levelData = new LevelCity();
+                break;
+            case "LevelForest":
+                levelData = new LevelForest();
+                break;
+            case "LevelMountain":
+                levelData = new LevelMountain();
+                break;
         }
 
         gameObjects = new ArrayList<>();
