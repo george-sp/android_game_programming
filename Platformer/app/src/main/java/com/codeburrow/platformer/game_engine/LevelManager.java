@@ -11,6 +11,7 @@ import com.codeburrow.platformer.enemy.Guard;
 import com.codeburrow.platformer.levels.LevelCave;
 import com.codeburrow.platformer.levels.LevelCity;
 import com.codeburrow.platformer.levels.LevelForest;
+import com.codeburrow.platformer.levels.LevelMountain;
 import com.codeburrow.platformer.pickups.Coin;
 import com.codeburrow.platformer.pickups.ExtraLife;
 import com.codeburrow.platformer.pickups.MachineGunUpgrade;
