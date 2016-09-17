@@ -343,6 +343,27 @@ public class PlatformView extends SurfaceView implements Runnable {
             // Draw parallax backgrounds from layer 1 to 3.
             drawBackground(4, 0);
 
+            // Draw the HUD.
+            // This code relies on the bitmaps from the extra life, upgrade and coin.
+            // Therefore there must be at least one of each in the level.
+            int topSpace = viewport.getPixelsPerMetreY() / 4;
+            int iconSize = viewport.getPixelsPerMetreX();
+            int padding = viewport.getPixelsPerMetreX() / 5;
+            int centring = viewport.getPixelsPerMetreY() / 6;
+            paint.setTextSize(viewport.getPixelsPerMetreY() / 2);
+            paint.setTextAlign(Paint.Align.CENTER);
+
+            paint.setColor(Color.argb(100, 0, 0, 0));
+            canvas.drawRect(0, 0, iconSize * 7.0f, topSpace * 2 + iconSize, paint);
+            paint.setColor(Color.argb(255, 255, 255, 0));
+
+            canvas.drawBitmap(levelManager.getBitmap('e'), 0, topSpace, paint);
+            canvas.drawText("" + playerState.getLives(), (iconSize * 1) + padding, (iconSize) - centring, paint);
+            canvas.drawBitmap(levelManager.getBitmap('c'), (iconSize * 2.5f) + padding, topSpace, paint);
+            canvas.drawText("" + playerState.getCredits(), (iconSize * 3.5f) + padding * 2, (iconSize) - centring, paint);
+            canvas.drawBitmap(levelManager.getBitmap('u'), (iconSize * 5.0f) + padding, topSpace, paint);
+            canvas.drawText("" + playerState.getFireRate(), (iconSize * 6.0f) + padding * 2, (iconSize) - centring, paint);
+            
             // Draw some debugging info.
             if (debugging) {
                 paint.setTextSize(16);
