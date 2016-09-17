@@ -9,6 +9,7 @@ import com.codeburrow.platformer.background.BackgroundData;
 import com.codeburrow.platformer.enemy.Drone;
 import com.codeburrow.platformer.enemy.Guard;
 import com.codeburrow.platformer.levels.LevelCave;
+import com.codeburrow.platformer.levels.LevelCity;
 import com.codeburrow.platformer.pickups.Coin;
 import com.codeburrow.platformer.pickups.ExtraLife;
 import com.codeburrow.platformer.pickups.MachineGunUpgrade;
@@ -256,7 +257,7 @@ public class LevelManager {
     /**
      * Returns an index that matches the index of the appropriate Bitmap
      * held in the bitmapsArray.
-     * <p>
+     * <p/>
      * Only one copy of each Bitmap object is needed.
      *
      * @param blockType The block type of the tile represented by a char
