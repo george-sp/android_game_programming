@@ -2,12 +2,13 @@ package com.codeburrow.platformer.levels;
 
 import com.codeburrow.platformer.background.BackgroundData;
 import com.codeburrow.platformer.game_engine.LevelData;
+import com.codeburrow.platformer.special_objects.Location;
 
 import java.util.ArrayList;
 
 /**
  * The first game level.
- * <p/>
+ * <p>
  * Enter a different alpha-numeric character depending
  * on which GameObject we want to place into the level.
  */
@@ -32,6 +33,10 @@ public class LevelCave extends LevelData {
         this.tiles.add("..............1....g.....u1...........g.......");
         this.tiles.add("......................e..1....e.....e.........");
         this.tiles.add("ffff1111111111111111111111111111111111111111..");
+
+        // Declare the values for the teleports in order of appearance.
+        locations = new ArrayList<>();
+        this.locations.add(new Location("LevelCity", 118f, 18f));
 
         backgroundDataList = new ArrayList<>();
         this.backgroundDataList.add(new BackgroundData("underground", true, -1, -10, 25, 4, 35));

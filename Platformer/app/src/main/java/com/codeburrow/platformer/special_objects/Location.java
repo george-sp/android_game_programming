@@ -5,9 +5,9 @@ package com.codeburrow.platformer.special_objects;
  */
 public class Location {
 
-    String level;
-    float x;
-    float y;
+    public String level;
+    public float x;
+    public float y;
 
     public Location(String level, float x, float y) {
         this.level = level;

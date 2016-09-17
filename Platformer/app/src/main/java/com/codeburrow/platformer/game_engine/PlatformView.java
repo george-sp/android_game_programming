@@ -17,6 +17,8 @@ import android.view.SurfaceView;
 import com.codeburrow.platformer.background.Background;
 import com.codeburrow.platformer.enemy.Drone;
 import com.codeburrow.platformer.player.PlayerState;
+import com.codeburrow.platformer.special_objects.Location;
+import com.codeburrow.platformer.special_objects.Teleport;
 
 import java.util.ArrayList;
 
@@ -75,6 +77,9 @@ public class PlatformView extends SurfaceView implements Runnable {
         inputController = new InputController(viewport.getScreenWidth(), viewport.getScreenHeight());
         // Store the player starting(respawn) location.
         PointF respawnLocation = new PointF(px, py);
+        playerState.saveLocation(respawnLocation);
+        // Reload the players current fire rate from the player state
+        levelManager.player.machineGun.setRateOfFire(playerState.getFireRate());
         // Set the player's location as the world centre.
         viewport.setWorldCentre(
                 levelManager.gameObjects.get(levelManager.playerIndex).getWorldLocation().x,
@@ -170,6 +175,12 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 levelManager.player.setWorldLocationX(location.x);
                                 levelManager.player.setWorldLocationY(location.y);
                                 levelManager.player.setxVelocity(0);
+                                break;
+                            case 't':
+                                Teleport teleport = (Teleport) go;
+                                Location locationTeleport = teleport.getTarget();
+                                loadLevel(locationTeleport.level, locationTeleport.x, locationTeleport.y);
+                                soundManager.playSound("teleport");
                                 break;
                             default:
                                 // Probably a regular tile.

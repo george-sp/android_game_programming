@@ -28,6 +28,7 @@ import com.codeburrow.platformer.scenery_objects.Stalactite;
 import com.codeburrow.platformer.scenery_objects.Stalagmite;
 import com.codeburrow.platformer.scenery_objects.Tree;
 import com.codeburrow.platformer.scenery_objects.Tree2;
+import com.codeburrow.platformer.special_objects.Teleport;
 
 import java.util.ArrayList;
 
@@ -242,6 +243,9 @@ public class LevelManager {
             case 'z':
                 index = 21;
                 break;
+            case 't':
+                index = 22;
+                break;
             default:
                 index = 0;
                 break;
@@ -252,7 +256,7 @@ public class LevelManager {
     /**
      * Returns an index that matches the index of the appropriate Bitmap
      * held in the bitmapsArray.
-     * <p/>
+     * <p>
      * Only one copy of each Bitmap object is needed.
      *
      * @param blockType The block type of the tile represented by a char
@@ -327,6 +331,9 @@ public class LevelManager {
             case 'z':
                 index = 21;
                 break;
+            case 't':
+                index = 22;
+                break;
             default:
                 index = 0;
                 break;
@@ -347,6 +354,7 @@ public class LevelManager {
 
         // Keep track of where we load our game objects.
         int currentIndex = -1;
+        int teleportIndex = -1;
         // How wide and high is the map.
         mapHeight = levelData.tiles.size();
         mapWidth = levelData.tiles.get(0).length();
@@ -444,6 +452,11 @@ public class LevelManager {
                         case 'z':
                             // Add a boulders to the gameObjects
                             gameObjects.add(new Boulders(j, i, c));
+                            break;
+                        case 't':
+                            // Add a teleport to the gameObjects.
+                            teleportIndex++;
+                            gameObjects.add(new Teleport(j, i, c, levelData.locations.get(teleportIndex)));
                             break;
                     }
                     if (bitmapsArray[getBitmapIndex(c)] == null) {

@@ -1,6 +1,7 @@
 package com.codeburrow.platformer.game_engine;
 
 import com.codeburrow.platformer.background.BackgroundData;
+import com.codeburrow.platformer.special_objects.Location;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class LevelData {
 
     public ArrayList<String> tiles;
     public ArrayList<BackgroundData> backgroundDataList;
+    public ArrayList<Location> locations;
 
     /*
      * Tile types
