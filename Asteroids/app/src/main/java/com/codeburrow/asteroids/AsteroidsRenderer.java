@@ -2,15 +2,21 @@ package com.codeburrow.asteroids;
 
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glViewport;
+import static android.opengl.Matrix.orthoM;
 
 /**
  * This class is attached as the renderer of the GLSurfaceView.
  */
 public class AsteroidsRenderer implements Renderer {
 
+    private static final String LOG_TAG = AsteroidsRenderer.class.getSimpleName();
     boolean debugging = true;
 
     // For monitoring and controlling the frames per second.
@@ -36,19 +42,83 @@ public class AsteroidsRenderer implements Renderer {
         handyPointF2 = new PointF();
     }
 
+    /**
+     * It is called every time a GLSurfaceView class with attached renderer is created.
+     *
+     * @param glUnused
+     * @param config
+     */
     @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-
+    public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+        // The color that will be used to clear the screen each frame in onDrawFrame().
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        // Get GLManager to compile and link the shaders into an object.
+        GLManager.buildProgram();
+        createObjects();
     }
 
+    /**
+     * This next overridden method is called once after onSurfaceCreated()
+     * and any time the screen orientation changes.
+     *
+     * @param glUnused
+     * @param width
+     * @param height
+     */
     @Override
-    public void onSurfaceChanged(GL10 gl10, int i, int i1) {
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        // Make full screen.
+        glViewport(0, 0, width, height);
 
+        /*
+            Initialize our viewport matrix by passing in the starting
+            range of the game world that will be mapped, by OpenGL to
+            the screen. We will dynamically amend this as the player
+            moves around.
+
+            The arguments to setup the viewport matrix:
+            our array,
+            starting index in array,
+            min x, max x,
+            min y, max y,
+            min z, max z)
+        */
+
+        orthoM(viewportMatrix, 0, 0, gameManager.metresToShowX, 0, gameManager.metresToShowY, 0f, 1f);
     }
 
+    /**
+     * OpenGL will call onDrawFrame() up to hundreds of times per second.
+     *
+     * @param glUnused
+     */
     @Override
-    public void onDrawFrame(GL10 gl10) {
+    public void onDrawFrame(GL10 glUnused) {
+        long startFrameTime = System.currentTimeMillis();
 
+        if (gameManager.isPlaying()) {
+            update(fps);
+        }
+
+        draw();
+
+        // Calculate the fps this frame.
+        // We can then use the result to time animations and more.
+        long timeThisFrame = System.currentTimeMillis() - startFrameTime;
+        if (timeThisFrame >= 1) {
+            fps = 1000 / timeThisFrame;
+        }
+
+        // Output the average frames per second to the console.
+        if (debugging) {
+            frameCounter++;
+            averageFPS = averageFPS + fps;
+            if (frameCounter > 100) {
+                averageFPS = averageFPS / frameCounter;
+                frameCounter = 0;
+                Log.e(LOG_TAG, "averageFPS: " + averageFPS);
+            }
+        }
     }
 
     private void createObjects() {
