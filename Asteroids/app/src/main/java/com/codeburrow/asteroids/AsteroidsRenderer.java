@@ -10,6 +10,8 @@ import javax.microedition.khronos.opengles.GL10;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.orthoM;
+import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 
 /**
  * This class is attached as the renderer of the GLSurfaceView.
@@ -122,15 +124,34 @@ public class AsteroidsRenderer implements Renderer {
     }
 
     private void createObjects() {
+        // Create our game objects.
 
+        // First the ship in the center of the map.
+        gameManager.ship = new SpaceShip(gameManager.mapWidth / 2, gameManager.mapHeight / 2);
     }
 
     private void update(long fps) {
 
     }
 
-
     private void draw() {
+        // Where is the ship?
+        handyPointF = gameManager.ship.getWorldLocation();
 
+        // Modify the viewport matrix orthographic projection based on the ship location.
+        orthoM(viewportMatrix, 0,
+                handyPointF.x - gameManager.metresToShowX / 2,
+                handyPointF.x + gameManager.metresToShowX / 2,
+                handyPointF.y - gameManager.metresToShowY / 2,
+                handyPointF.y + gameManager.metresToShowY / 2,
+                0f, 1f);
+
+        // Clear the screen.
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Start drawing!
+
+        // Draw the ship.
+        gameManager.ship.draw(viewportMatrix);
     }
 }
