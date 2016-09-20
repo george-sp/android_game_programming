@@ -2,6 +2,8 @@ package com.codeburrow.asteroids;
 
 import android.graphics.PointF;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.glGetAttribLocation;
@@ -111,5 +113,40 @@ public class GameObject {
     public void setWorldLocation(float x, float y) {
         this.worldLocation.x = x;
         this.worldLocation.y = y;
+    }
+
+    public void setVertices(float[] objectVertices) {
+        modelVertices = new float[objectVertices.length];
+        modelVertices = objectVertices;
+
+        //Log.e("objectVertices[0]",""+objectVertices[0]);
+        //Log.e("modelVertices[0]",""+modelVertices[0]);
+
+        // Store how many vertices and elements there is for future use.
+        numElements = modelVertices.length;
+
+        //Log.e("numElements",""+numElements);
+        numVertices = numElements / ELEMENTS_PER_VERTEX;
+
+        /*
+         * Initialize the vertices ByteBuffer object based on the
+         * number of vertices in the ship design and the number of
+         * bytes there are in the float type.
+         *
+         * The ByteOrder.nativeOrder method simply detects
+         * if the particular system's endianness,
+         * (http://en.wikipedia.org/wiki/Endianness)
+         * and asFloatBuffer() tells ByteBuffer the type of data that will stored.
+         */
+        vertices = ByteBuffer.allocateDirect(numElements * FLOAT_SIZE)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+
+        /*
+         * We can now store our array of vertices into our vertices ByteBuffer
+         * by calling vertices.put(modelVertices).
+         * This data is now ready to be passed to OpenGL.
+         */
+        // Add the ship into the ByteBuffer object.
+        vertices.put(modelVertices);
     }
 }
