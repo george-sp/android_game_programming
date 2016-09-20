@@ -6,9 +6,32 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_LINES;
+import static android.opengl.GLES20.GL_POINTS;
+import static android.opengl.GLES20.GL_TRIANGLES;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform4f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
+import static android.opengl.GLES20.glVertexAttribPointer;
+import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.setIdentityM;
+import static android.opengl.Matrix.setRotateM;
+import static android.opengl.Matrix.translateM;
+import static com.codeburrow.asteroids.GLManager.A_POSITION;
+import static com.codeburrow.asteroids.GLManager.COMPONENTS_PER_VERTEX;
+import static com.codeburrow.asteroids.GLManager.ELEMENTS_PER_VERTEX;
+import static com.codeburrow.asteroids.GLManager.FLOAT_SIZE;
+import static com.codeburrow.asteroids.GLManager.STRIDE;
+import static com.codeburrow.asteroids.GLManager.U_COLOR;
+import static com.codeburrow.asteroids.GLManager.U_MATRIX;
+import static com.codeburrow.asteroids.GLManager.aPositionLocation;
+import static com.codeburrow.asteroids.GLManager.uColorLocation;
+import static com.codeburrow.asteroids.GLManager.uMatrixLocation;
 
 /**
  *
@@ -148,5 +171,85 @@ public class GameObject {
          */
         // Add the ship into the ByteBuffer object.
         vertices.put(modelVertices);
+    }
+
+    public void draw(float[] viewportMatrix) {
+        // Tell OpenGl to use the glProgram.
+        glUseProgram(glProgram);
+
+        // Set vertices to the first byte.
+        vertices.position(0);
+
+        glVertexAttribPointer(
+                aPositionLocation,
+                COMPONENTS_PER_VERTEX,
+                GL_FLOAT,
+                false,
+                STRIDE,
+                vertices);
+
+        glEnableVertexAttribArray(aPositionLocation);
+
+        // Translate model coordinates into world coordinates.
+        // Make an identity matrix to base our future calculations on.
+        setIdentityM(modelMatrix, 0);
+        // Make a translation matrix.
+        /*
+            Parameters
+            m	matrix
+            mOffset	index into m where the matrix starts
+            x	translation factor x
+            y	translation factor y
+            z	translation factor z
+        */
+        translateM(modelMatrix, 0, worldLocation.x, worldLocation.y, 0);
+
+        // Combine the model with the viewport into a new matrix.
+        multiplyMM(viewportModelMatrix, 0, viewportMatrix, 0, modelMatrix, 0);
+
+        /*
+            Now rotate the model
+
+            Parameters
+            rm	returns the result
+            rmOffset	index into rm where the result matrix starts
+            a	angle to rotate in degrees
+            x	X axis component
+            y	Y axis component
+            z	Z axis component
+        */
+        setRotateM(modelMatrix, 0, facingAngle, 0, 0, 1.0f);
+
+        // And multiply the rotation matrix into the model-viewport matrix.
+        multiplyMM(rotateViewportModelMatrix, 0, viewportModelMatrix, 0, modelMatrix, 0);
+
+        // Give the matrix to OpenGL.
+        // glUniformMatrix4fv(uMatrixLocation, 1, false, viewportMatrix, 0);
+        glUniformMatrix4fv(uMatrixLocation, 1, false, rotateViewportModelMatrix, 0);
+        // Assign a color to the fragment shader.
+        glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+
+        // Draw the point, lines or triangle.
+        switch (type) {
+            case SHIP:
+                glDrawArrays(GL_TRIANGLES, 0, numVertices);
+                break;
+
+            case ASTEROID:
+                glDrawArrays(GL_LINES, 0, numVertices);
+                break;
+
+            case BORDER:
+                glDrawArrays(GL_LINES, 0, numVertices);
+                break;
+
+            case STAR:
+                glDrawArrays(GL_POINTS, 0, numVertices);
+                break;
+
+            case BULLET:
+                glDrawArrays(GL_POINTS, 0, numVertices);
+                break;
+        }
     }
 }
