@@ -4,6 +4,10 @@ import android.graphics.PointF;
 
 import java.nio.FloatBuffer;
 
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUseProgram;
+
 /**
  *
  */
@@ -55,4 +59,57 @@ public class GameObject {
     // How long and wide is the GameObject?
     private float length;
     private float width;
+
+    public GameObject() {
+        // Only compile shaders once.
+        if (glProgram == -1) {
+            setGLProgram();
+
+            // Tell OpenGl to use the glProgram.
+            glUseProgram(glProgram);
+
+            // Now we have a glProgram we need the locations of our three GLSL variables.
+            // We will use these when we call draw on the object.
+            uMatrixLocation = glGetUniformLocation(glProgram, U_MATRIX);
+            aPositionLocation = glGetAttribLocation(glProgram, A_POSITION);
+            uColorLocation = glGetUniformLocation(glProgram, U_COLOR);
+        }
+
+        // Set the object as active
+        isActive = true;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setGLProgram() {
+        glProgram = GLManager.getGLProgram();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type t) {
+        this.type = t;
+    }
+
+    public void setSize(float w, float l) {
+        width = w;
+        length = l;
+    }
+
+    public PointF getWorldLocation() {
+        return worldLocation;
+    }
+
+    public void setWorldLocation(float x, float y) {
+        this.worldLocation.x = x;
+        this.worldLocation.y = y;
+    }
 }
