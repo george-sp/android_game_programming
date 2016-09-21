@@ -130,10 +130,19 @@ public class AsteroidsRenderer implements Renderer {
         gameManager.ship = new SpaceShip(gameManager.mapWidth / 2, gameManager.mapHeight / 2);
         // The deadly border.
         gameManager.border = new Border(gameManager.mapWidth, gameManager.mapHeight);
+        // Some stars.
+        gameManager.stars = new Star[gameManager.numStars];
+        for (int i = 0; i < gameManager.numStars; i++) {
+            // Pass in the map size so the stars no where to spawn.
+            gameManager.stars[i] = new Star(gameManager.mapWidth, gameManager.mapHeight);
+        }
     }
 
     private void update(long fps) {
-
+        // Update the stars. Twinkle the stars.
+        for (int i = 0; i < gameManager.numStars; i++) {
+            gameManager.stars[i].update();
+        }
     }
 
     private void draw() {
@@ -153,6 +162,13 @@ public class AsteroidsRenderer implements Renderer {
 
         // Start drawing!
 
+        // Draw some stars.
+        for (int i = 0; i < gameManager.numStars; i++) {
+            // Draw the star if it is an active one.
+            if (gameManager.stars[i].isActive()) {
+                gameManager.stars[i].draw(viewportMatrix);
+            }
+        }
         // Draw the ship.
         gameManager.ship.draw(viewportMatrix);
         // Draw the border.

@@ -14,6 +14,8 @@ public class GameManager {
 
     SpaceShip ship;
     Border border;
+    Star[] stars;
+    int numStars = 200;
 
     int screenWidth;
     int screenHeight;
