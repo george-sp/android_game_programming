@@ -136,6 +136,12 @@ public class AsteroidsRenderer implements Renderer {
             // Pass in the map size so the stars no where to spawn.
             gameManager.stars[i] = new Star(gameManager.mapWidth, gameManager.mapHeight);
         }
+        // Some bullets.
+        gameManager.bullets = new Bullet[gameManager.numBullets];
+        for (int i = 0; i < gameManager.numBullets; i++) {
+            // Initialize their location in the game world as the center of the ship.
+            gameManager.bullets[i] = new Bullet(gameManager.ship.getWorldLocation().x, gameManager.ship.getWorldLocation().y);
+        }
     }
 
     private void update(long fps) {
@@ -143,9 +149,12 @@ public class AsteroidsRenderer implements Renderer {
         for (int i = 0; i < gameManager.numStars; i++) {
             gameManager.stars[i].update();
         }
-
         // Update the space-ship.
         gameManager.ship.update(fps);
+        // Update all the bullets.
+        for (int i = 0; i < gameManager.numBullets; i++) {
+            gameManager.bullets[i].update(fps, gameManager.ship.getWorldLocation());
+        }
     }
 
     private void draw() {
@@ -171,6 +180,10 @@ public class AsteroidsRenderer implements Renderer {
             if (gameManager.stars[i].isActive()) {
                 gameManager.stars[i].draw(viewportMatrix);
             }
+        }
+        // Draw the bullets.
+        for (int i = 0; i < gameManager.numBullets; i++) {
+            gameManager.bullets[i].draw(viewportMatrix);
         }
         // Draw the ship.
         gameManager.ship.draw(viewportMatrix);

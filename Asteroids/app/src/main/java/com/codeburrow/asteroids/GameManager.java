@@ -16,6 +16,8 @@ public class GameManager {
     Border border;
     Star[] stars;
     int numStars = 200;
+    Bullet[] bullets;
+    int numBullets = 20;
 
     int screenWidth;
     int screenHeight;
