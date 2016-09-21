@@ -1,17 +1,18 @@
 package com.codeburrow.asteroids;
 
 import android.graphics.PointF;
+import android.hardware.input.InputManager;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.orthoM;
-import static android.opengl.GLES20.glClear;
-import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 
 /**
  * This class is attached as the renderer of the GLSurfaceView.
@@ -37,8 +38,10 @@ public class AsteroidsRenderer implements Renderer {
     PointF handyPointF;
     PointF handyPointF2;
 
-    public AsteroidsRenderer(GameManager gameManager) {
+    public AsteroidsRenderer(GameManager gameManager, SoundManager soundManager, InputController inputController) {
         this.gameManager = gameManager;
+        this.soundManager = soundManager;
+        this.inputController = inputController;
 
         handyPointF = new PointF();
         handyPointF2 = new PointF();
