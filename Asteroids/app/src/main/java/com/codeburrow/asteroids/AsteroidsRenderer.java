@@ -33,6 +33,8 @@ public class AsteroidsRenderer implements Renderer {
 
     // A class to help manage our game objects current state.
     private GameManager gameManager;
+    private SoundManager soundManager;
+    private InputController inputController;
 
     // For capturing various PointF details without creating new objects in the speed critical areas.
     PointF handyPointF;
