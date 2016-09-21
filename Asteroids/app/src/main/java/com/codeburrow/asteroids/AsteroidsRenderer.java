@@ -128,6 +128,8 @@ public class AsteroidsRenderer implements Renderer {
 
         // First the ship in the center of the map.
         gameManager.ship = new SpaceShip(gameManager.mapWidth / 2, gameManager.mapHeight / 2);
+        // The deadly border.
+        gameManager.border = new Border(gameManager.mapWidth, gameManager.mapHeight);
     }
 
     private void update(long fps) {
@@ -152,6 +154,8 @@ public class AsteroidsRenderer implements Renderer {
         // Start drawing!
 
         // Draw the ship.
+        gameManager.ship.draw(viewportMatrix);
+        // Draw the border.
         gameManager.ship.draw(viewportMatrix);
     }
 }
