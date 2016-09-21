@@ -172,6 +172,6 @@ public class AsteroidsRenderer implements Renderer {
         // Draw the ship.
         gameManager.ship.draw(viewportMatrix);
         // Draw the border.
-        gameManager.ship.draw(viewportMatrix);
+        gameManager.border.draw(viewportMatrix);
     }
 }
