@@ -143,6 +143,9 @@ public class AsteroidsRenderer implements Renderer {
         for (int i = 0; i < gameManager.numStars; i++) {
             gameManager.stars[i].update();
         }
+
+        // Update the space-ship.
+        gameManager.ship.update(fps);
     }
 
     private void draw() {
