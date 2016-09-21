@@ -53,4 +53,24 @@ public class Bullet extends GameObject {
     public boolean isInFlight() {
         return inFlight;
     }
+
+    /**
+     * Moves the bullet based on its facingAngle and speed,
+     * if is inFlight is true.
+     *
+     * @param fps
+     * @param shipLocation
+     */
+    public void update(long fps, PointF shipLocation) {
+        // Set the velocity if bullet inFlight is true.
+        if (inFlight) {
+            setxVelocity((float) (getSpeed() * Math.cos(Math.toRadians(getFacingAngle() + 90))));
+            setyVelocity((float) (getSpeed() * Math.sin(Math.toRadians(getFacingAngle() + 90))));
+        } else {
+            // Have it sit inside the ship.
+            setWorldLocation(shipLocation.x, shipLocation.y);
+        }
+
+        move(fps);
+    }
 }
