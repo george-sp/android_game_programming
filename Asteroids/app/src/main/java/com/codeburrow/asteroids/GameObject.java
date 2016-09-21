@@ -116,26 +116,78 @@ public class GameObject {
         glProgram = GLManager.getGLProgram();
     }
 
-    public Type getType() {
-        return type;
-    }
-
     public void setType(Type t) {
         this.type = t;
     }
 
     public void setSize(float w, float l) {
-        width = w;
-        length = l;
+        this.width = w;
+        this.length = l;
+    }
+
+    public void setWorldLocation(float x, float y) {
+        this.worldLocation.x = x;
+        this.worldLocation.y = y;
+    }
+
+    public void setRotationRate(float rotationRate) {
+        this.rotationRate = rotationRate;
+    }
+
+    public void setTravellingAngle(float travellingAngle) {
+        this.travellingAngle = travellingAngle;
+    }
+
+    public void setFacingAngle(float facingAngle) {
+        this.facingAngle = facingAngle;
+    }
+
+    public void setxVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
+
+    public float getyVelocity() {
+        return yVelocity;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+    
+    public Type getType() {
+        return type;
     }
 
     public PointF getWorldLocation() {
         return worldLocation;
     }
 
-    public void setWorldLocation(float x, float y) {
-        this.worldLocation.x = x;
-        this.worldLocation.y = y;
+    public float getTravellingAngle() {
+        return travellingAngle;
+    }
+
+    public float getFacingAngle() {
+        return facingAngle;
     }
 
     public void setVertices(float[] objectVertices) {
@@ -171,6 +223,19 @@ public class GameObject {
          */
         // Add the ship into the ByteBuffer object.
         vertices.put(modelVertices);
+    }
+
+    void move(float fps) {
+        if (xVelocity != 0) {
+            worldLocation.x += xVelocity / fps;
+        }
+        if (yVelocity != 0) {
+            worldLocation.y += yVelocity / fps;
+        }
+        // Rotate.
+        if (rotationRate != 0) {
+            facingAngle = facingAngle + rotationRate / fps;
+        }
     }
 
     public void draw(float[] viewportMatrix) {
