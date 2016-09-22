@@ -6,8 +6,23 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_LINES;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform4f;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUseProgram;
+import static android.opengl.GLES20.glVertexAttribPointer;
 import static android.opengl.Matrix.orthoM;
+import static com.codeburrow.asteroids.GLManager.A_POSITION;
+import static com.codeburrow.asteroids.GLManager.COMPONENTS_PER_VERTEX;
 import static com.codeburrow.asteroids.GLManager.FLOAT_SIZE;
+import static com.codeburrow.asteroids.GLManager.STRIDE;
+import static com.codeburrow.asteroids.GLManager.U_COLOR;
+import static com.codeburrow.asteroids.GLManager.U_MATRIX;
 
 public class GameButton {
 
@@ -102,4 +117,33 @@ public class GameButton {
         glProgram = GLManager.getGLProgram();
     }
 
+    public void draw() {
+        // And tell OpenGl to use the glProgram.
+        glUseProgram(glProgram);
+
+        // Now we have a glProgram we need the locations of our three GLSL variables.
+        int uMatrixLocation = glGetUniformLocation(glProgram, U_MATRIX);
+        int aPositionLocation = glGetAttribLocation(glProgram, A_POSITION);
+        int uColorLocation = glGetUniformLocation(glProgram, U_COLOR);
+
+        vertices.position(0);
+
+        glVertexAttribPointer(
+                aPositionLocation,
+                COMPONENTS_PER_VERTEX,
+                GL_FLOAT,
+                false,
+                STRIDE,
+                vertices);
+
+        glEnableVertexAttribArray(aPositionLocation);
+
+        // Just give the passed in matrix to OpenGL.
+        glUniformMatrix4fv(uMatrixLocation, 1, false, viewportMatrix, 0);
+        // Assign a color to the fragment shader.
+        glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+        // Draw the lines.
+        // start at the first element of the vertices array and read in all vertices.
+        glDrawArrays(GL_LINES, 0, numVertices);
+    }
 }
