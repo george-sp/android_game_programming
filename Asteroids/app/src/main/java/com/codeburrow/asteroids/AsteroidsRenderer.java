@@ -171,6 +171,12 @@ public class AsteroidsRenderer implements Renderer {
         for (int i = 0; i < gameManager.numBullets; i++) {
             gameManager.bullets[i].update(fps, gameManager.ship.getWorldLocation());
         }
+        // Update all the asteroids.
+        for (int i = 0; i < gameManager.numAsteroids; i++) {
+            if (gameManager.asteroids[i].isActive()) {
+                gameManager.asteroids[i].update(fps);
+            }
+        }
     }
 
     private void draw() {
@@ -200,6 +206,12 @@ public class AsteroidsRenderer implements Renderer {
         // Draw the bullets.
         for (int i = 0; i < gameManager.numBullets; i++) {
             gameManager.bullets[i].draw(viewportMatrix);
+        }
+        // Draw the asteroids.
+        for (int i = 0; i < gameManager.numAsteroids; i++) {
+            if (gameManager.asteroids[i].isActive()) {
+                gameManager.asteroids[i].draw(viewportMatrix);
+            }
         }
         // Draw the ship.
         gameManager.ship.draw(viewportMatrix);
