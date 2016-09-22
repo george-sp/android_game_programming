@@ -1,7 +1,6 @@
 package com.codeburrow.asteroids;
 
 import android.graphics.PointF;
-import android.hardware.input.InputManager;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
@@ -146,6 +145,18 @@ public class AsteroidsRenderer implements Renderer {
         for (int i = 0; i < gameManager.numBullets; i++) {
             // Initialize their location in the game world as the center of the ship.
             gameManager.bullets[i] = new Bullet(gameManager.ship.getWorldLocation().x, gameManager.ship.getWorldLocation().y);
+        }
+
+        // Determine the number of asteroids.
+        gameManager.numAsteroids = gameManager.baseNumAsteroids * gameManager.levelNumber;
+        // Set how many asteroids need to be destroyed by player.
+        gameManager.numAsteroidsRemaining = gameManager.numAsteroids;
+        // Spawn the asteroids.
+        //gm.asteroids = new Asteroid[gm.baseNumAsteroids];
+        for (int i = 0; i < gameManager.numAsteroids * gameManager.levelNumber; i++) {
+            // Create a new asteroid.
+            // Pass in level number so they can be made appropriately dangerous.
+            gameManager.asteroids[i] = new Asteroid(gameManager.levelNumber, gameManager.mapWidth, gameManager.mapHeight);
         }
     }
 
