@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 public class InputController {
 
-    private currentBullet;
+    // Keep track of which buullet is going to be shot next.
+    private int currentBullet;
 
     Rect left;
     Rect right;

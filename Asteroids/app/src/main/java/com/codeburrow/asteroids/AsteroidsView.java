@@ -2,15 +2,8 @@ package com.codeburrow.asteroids;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.renderscript.ScriptGroup;
+import android.view.MotionEvent;
 
-/**
- * @author George Spiridakis <george@codeburrow.com>
- * @since Sep/17/2016.
- * ===================================================
- * ---------->    http://codeburrow.com    <----------
- * ===================================================
- */
 public class AsteroidsView extends GLSurfaceView {
 
     GameManager gameManager;
@@ -30,5 +23,11 @@ public class AsteroidsView extends GLSurfaceView {
 
         // Attach our renderer to the GLSurfaceView.
         setRenderer(new AsteroidsRenderer(gameManager, soundManager, inputController));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        inputController.handleInput(motionEvent, gameManager, soundManager);
+        return true;
     }
 }
