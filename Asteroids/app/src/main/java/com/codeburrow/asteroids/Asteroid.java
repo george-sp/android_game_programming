@@ -58,4 +58,92 @@ public class Asteroid extends GameObject {
 
         move(fps);
     }
+
+    /**
+     * Create a random asteroid shape.
+     */
+    public void generatePoints() {
+        points = new PointF[7];
+
+        Random r = new Random();
+        int i;
+
+        // First a point roughly centre below 0.
+        points[0] = new PointF();
+        i = (r.nextInt(10)) + 1;
+        if (i % 2 == 0) {
+            i = -i;
+        }
+        points[0].x = i;
+        i = -(r.nextInt(20) + 5);
+        points[0].y = i;
+
+        // Now a point still below centre but to the right and up a bit.
+        points[1] = new PointF();
+        i = r.nextInt(14) + 11;
+        points[1].x = i;
+        i = -(r.nextInt(12) + 1);
+        points[1].y = i;
+
+        // Above 0 to the right.
+        points[2] = new PointF();
+        i = r.nextInt(14) + 11;
+        points[1].x = i;
+        i = r.nextInt(12) + 1;
+        points[2].y = i;
+
+        // A point roughly centre above 0.
+        points[3] = new PointF();
+        i = (r.nextInt(10)) + 1;
+        if (i % 2 == 0) {
+            i = -i;
+        }
+        points[3].x = i;
+        i = r.nextInt(20) + 5;
+        points[3].y = i;
+
+        // Left above 0.
+        points[4] = new PointF();
+        i = -(r.nextInt(14) + 11);
+        points[4].x = i;
+        i = r.nextInt(12) + 1;
+        points[4].y = i;
+
+        // Left below 0.
+        points[5] = new PointF();
+        i = -(r.nextInt(14) + 11);
+        points[5].x = i;
+        i = -(r.nextInt(12) + 1);
+
+        points[5].y = i;
+
+        // Now use these points to draw our asteroid.
+        float[] asteroidVertices = new float[]{
+                // First point to second point
+                points[0].x, points[0].y, 0,
+                points[1].x, points[1].y, 0,
+
+                // 2nd to 3rd
+                points[1].x, points[1].y, 0,
+                points[2].x, points[2].y, 0,
+
+                // 3 to 4
+                points[2].x, points[2].y, 0,
+                points[3].x, points[3].y, 0,
+
+                // 4 to 5
+                points[3].x, points[3].y, 0,
+                points[4].x, points[4].y, 0,
+
+                // 5 to 6
+                points[4].x, points[4].y, 0,
+                points[5].x, points[5].y, 0,
+
+                // 6 back to 1
+                points[5].x, points[5].y, 0,
+                points[0].x, points[0].y, 0,
+        };
+
+        setVertices(asteroidVertices);
+    }
 }
