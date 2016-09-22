@@ -46,4 +46,16 @@ public class Asteroid extends GameObject {
         // Then call the parent setVertices().
         generatePoints();
     }
+
+    /**
+     * Calculates the velocity based on speed and travelling angle.
+     *
+     * @param fps
+     */
+    public void update(float fps) {
+        setxVelocity((float) (getSpeed() * Math.cos(Math.toRadians(getTravellingAngle() + 90))));
+        setyVelocity((float) (getSpeed() * Math.sin(Math.toRadians(getTravellingAngle() + 90))));
+
+        move(fps);
+    }
 }
