@@ -66,7 +66,8 @@ public class TallyIcon {
         p2.x = startX;
         p2.y = startY - iconHeight;
 
-        /* Add the four points to an array of vertices.
+        /*
+         * Add the four points to an array of vertices.
          * This time, because we don't need to animate the border
          * we can just declare the world space coordinates, the same as above.
          */
@@ -82,7 +83,8 @@ public class TallyIcon {
         int numElements = modelVertices.length;
         numVertices = numElements / ELEMENTS_PER_VERTEX;
 
-        /* Initialize the vertices ByteBuffer object based on the
+        /*
+         * Initialize the vertices ByteBuffer object based on the
          * number of vertices in the button and the number of
          * bytes there are in the float type.
          */
