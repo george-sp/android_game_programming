@@ -23,6 +23,9 @@ public class GameManager {
     int numAsteroidsRemaining;
     int baseNumAsteroids = 10;
     int levelNumber = 1;
+    TallyIcon[] tallyIcons;
+    int numLives = 3;
+    LifeIcon[] lifeIcons;
 
     int screenWidth;
     int screenHeight;
@@ -37,6 +40,9 @@ public class GameManager {
 
         // For all our asteroids.
         asteroids = new Asteroid[500];
+
+        tallyIcons = new TallyIcon[500];
+        lifeIcons = new LifeIcon[50];
     }
 
     public void switchPlayingStatus() {

@@ -1,8 +1,11 @@
 package com.codeburrow.asteroids;
 
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -38,6 +41,9 @@ public class AsteroidsRenderer implements Renderer {
     // For capturing various PointF details without creating new objects in the speed critical areas.
     PointF handyPointF;
     PointF handyPointF2;
+
+    // This will hold our game buttons.
+    private final GameButton[] gameButtons = new GameButton[5];
 
     public AsteroidsRenderer(GameManager gameManager, SoundManager soundManager, InputController inputController) {
         this.gameManager = gameManager;
@@ -158,6 +164,30 @@ public class AsteroidsRenderer implements Renderer {
             // Pass in level number so they can be made appropriately dangerous.
             gameManager.asteroids[i] = new Asteroid(gameManager.levelNumber, gameManager.mapWidth, gameManager.mapHeight);
         }
+
+        // Now for the HUD objects.
+        // First the life icons.
+        for (int i = 0; i < gameManager.numLives; i++) {
+            // Notice we send in which icon this represents
+            // from left to right so padding and positioning is correct.
+            gameManager.lifeIcons[i] = new LifeIcon(gameManager, i);
+        }
+
+
+        // Now the tally icons (1 at the start).
+        for (int i = 0; i < gameManager.numAsteroidsRemaining; i++) {
+            // Notice we send in which icon this represents
+            // from left to right so padding and positioning is correct.
+            gameManager.tallyIcons[i] = new TallyIcon(gameManager, i);
+        }
+
+        // Now the buttons.
+        ArrayList<Rect> buttonsToDraw = inputController.getButtons();
+        int i = 0;
+        for (Rect rect : buttonsToDraw) {
+            gameButtons[i] = new GameButton(rect.top, rect.left, rect.bottom, rect.right, gameManager);
+            i++;
+        }
     }
 
     private void update(long fps) {
@@ -217,5 +247,21 @@ public class AsteroidsRenderer implements Renderer {
         gameManager.ship.draw(viewportMatrix);
         // Draw the border.
         gameManager.border.draw(viewportMatrix);
+        // Draw the buttons.
+        for (int i = 0; i < gameButtons.length; i++) {
+            gameButtons[i].draw();
+        }
+        // Draw the life icons.
+        for (int i = 0; i < gameManager.numLives; i++) {
+            // Notice we send in which icon this represents
+            // from left to right so padding and positioning is correct.
+            gameManager.lifeIcons[i].draw();
+        }
+        // Draw the level icons.
+        for (int i = 0; i < gameManager.numAsteroidsRemaining; i++) {
+            // Notice we send in which icon this represents
+            // from left to right so padding and positioning is correct.
+            gameManager.tallyIcons[i].draw();
+        }
     }
 }
