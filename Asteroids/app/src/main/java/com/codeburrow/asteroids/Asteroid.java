@@ -7,6 +7,7 @@ import java.util.Random;
 public class Asteroid extends GameObject {
 
     PointF[] points;
+    CollisionPackage collisionPackage;
 
     public Asteroid(int levelNumber, int mapWidth, int mapHeight) {
         super();
@@ -45,6 +46,10 @@ public class Asteroid extends GameObject {
         // Define a random asteroid shape.
         // Then call the parent setVertices().
         generatePoints();
+
+        // Initialize the collision package.
+        // (the object space vertex list, x any world location the largest possible radius, facingAngle)
+        collisionPackage = new CollisionPackage(points, getWorldLocation(), 25, getFacingAngle());
     }
 
     /**
@@ -57,6 +62,34 @@ public class Asteroid extends GameObject {
         setyVelocity((float) (getSpeed() * Math.sin(Math.toRadians(getTravellingAngle() + 90))));
 
         move(fps);
+
+        // Update the collision package.
+        collisionPackage.facingAngle = getFacingAngle();
+        collisionPackage.worldLocation = getWorldLocation();
+    }
+
+    /**
+     * Reverses the direction of travel and bounces the asteroid back
+     * by a few pixels when a collision has been detected.
+     */
+    public void bounce() {
+        // Reverse the travelling angle.
+        if (getTravellingAngle() >= 180) {
+            setTravellingAngle(getTravellingAngle() - 180);
+        } else {
+            setTravellingAngle(getTravellingAngle() + 180);
+        }
+
+        // Reverse velocity because occasionally they get stuck.
+        setWorldLocation((getWorldLocation().x + -getxVelocity() / 3), (getWorldLocation().y + -getyVelocity() / 3));
+
+        // Speed up by 10%.
+        setSpeed(getSpeed() * 1.1f);
+
+        // Not too fast though.
+        if (getSpeed() > getMaxSpeed()) {
+            setSpeed(getMaxSpeed());
+        }
     }
 
     /**
@@ -116,6 +149,17 @@ public class Asteroid extends GameObject {
         i = -(r.nextInt(12) + 1);
 
         points[5].y = i;
+
+        /*
+         * We add on an extra point that we won't use in asteroidVertices[].
+         * The point is the same as the first.
+         * This is because the last vertex links back to the first to create a line.
+         * This line will need to be used in calculations when we do our collision detection.
+         */
+        // Here is the extra vertex- same as the first.
+        points[6] = new PointF();
+        points[6].x = points[0].x;
+        points[6].x = points[0].x;
 
         // Now use these points to draw our asteroid.
         float[] asteroidVertices = new float[]{
