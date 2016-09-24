@@ -8,6 +8,7 @@ import android.graphics.PointF;
 public class Bullet extends GameObject {
 
     private boolean inFlight = false;
+    CollisionPackage collisionPackage;
 
     public Bullet(float shipX, float shipY) {
         super();
@@ -20,6 +21,16 @@ public class Bullet extends GameObject {
         float[] bulletVertices = new float[]{0, 0, 0};
 
         setVertices(bulletVertices);
+
+        // Initialize the collision package.
+        // (the object space vertex list, x any world location the largest possible radius, facingAngle)
+
+        // First, build a one element array.
+        PointF point = new PointF(0, 0);
+        PointF[] points = new PointF[1];
+        points[0] = point;
+        // 1.0f is an approximate representation of the size of a bullet.
+        collisionPackage = new CollisionPackage(points, getWorldLocation(), 1.0f, getFacingAngle());
     }
 
     /**
@@ -72,5 +83,9 @@ public class Bullet extends GameObject {
         }
 
         move(fps);
+
+        // Update the collision package.
+        collisionPackage.facingAngle = getFacingAngle();
+        collisionPackage.worldLocation = getWorldLocation();
     }
 }
