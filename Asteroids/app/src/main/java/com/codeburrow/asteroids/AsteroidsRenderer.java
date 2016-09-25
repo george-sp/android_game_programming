@@ -154,6 +154,34 @@ public class AsteroidsRenderer implements Renderer {
         }
     }
 
+    /**
+     * Handles what happen when an asteroid dies.
+     *
+     * @param asteroidIndex
+     */
+    public void destroyAsteroid(int asteroidIndex) {
+        gameManager.asteroids[asteroidIndex].setActive(false);
+        // Play a sound.
+        soundManager.playSound("explode");
+        // Reduce the number of active asteroids.
+        gameManager.numAsteroidsRemaining--;
+
+        // Has the player cleared them all?
+        if (gameManager.numAsteroidsRemaining == 0) {
+            // Play a victory sound.
+
+            // Increment the level number.
+            gameManager.levelNumber++;
+
+            // Extra life.
+            gameManager.numLives++;
+
+            soundManager.playSound("nextlevel");
+            // Respawn everything with more asteroids.
+            createObjects();
+        }
+    }
+
     private void createObjects() {
         // Create our game objects.
 
