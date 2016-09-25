@@ -27,7 +27,7 @@ public class CollisionDetection {
      *
      * @param cp1
      * @param cp2
-     * @return
+     * @return True if the radii overlap.
      */
     public static boolean detect(CollisionPackage cp1, CollisionPackage cp2) {
         boolean collided = false;
@@ -47,5 +47,37 @@ public class CollisionDetection {
             collided = true;
         }
         return collided;
+    }
+
+    /**
+     * Checks if anything hits the border.
+     * <p>
+     * Carries out a simple intersect test and return true if detected.
+     *
+     * @param mapWidth
+     * @param mapHeight
+     * @param cp
+     * @return True if an intersection is detected.
+     */
+    public static boolean contain(float mapWidth, float mapHeight, CollisionPackage cp) {
+        boolean possibleCollision = false;
+
+        // Check if any corner of a virtual rectangle around the centre of the object is out of bounds.
+        // Rectangle is the best because we are testing against straight sides (the border).
+        // If it is we have a possible collision.
+        if (cp.worldLocation.x - cp.radius < 0) {
+            possibleCollision = true;
+        } else if (cp.worldLocation.x + cp.radius > mapWidth) {
+            possibleCollision = true;
+        } else if (cp.worldLocation.y - cp.radius < 0) {
+            possibleCollision = true;
+        } else if (cp.worldLocation.y + cp.radius > mapHeight) {
+            possibleCollision = true;
+        }
+
+        if (possibleCollision) {
+            return true;
+        }
+        return false;
     }
 }
