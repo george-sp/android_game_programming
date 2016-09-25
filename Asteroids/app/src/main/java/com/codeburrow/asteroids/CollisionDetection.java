@@ -43,8 +43,39 @@ public class CollisionDetection {
         // Finally see if the two circles overlap
         // If they do it is worth doing the more intensive and accurate check.
         if (distance < cp1.radius + cp2.radius) {
-            // Log.e("Circle collision:", "true");
-            collided = true;
+            /*
+             * Before we jump into the for loops we will compute a few things
+             * that won't change for the duration of this method.
+             * The sine and cosine of the facing angle from each of the two collision packages.
+             * We could make a method to rotate angles as we do this so often.
+             * It is not straightforward however.
+             * If we put the rotation code in a method we would either have to
+             * put the below sine and cosine calculations in it
+             * which would make it slow or pre-compute them before the method call
+             * and the for loops which is kind of untidy in itself.
+             *
+             * Also if you consider that we need to more than one value for both sine and cosine of an angle,
+             * the method needs to 'know' which to use, which isn't rocket science
+             * but it starts to get even less compact than we might have initially imagined.
+             *
+             * So I opted for avoiding the method call altogether even if the code is a little sprawling.
+             *
+             * Actually if you place the whole lot in a method call you still get nearly 60 fps on an old Galaxy S2 phone.
+             */
+            double radianAngle1 = ((cp1.facingAngle / 180) * Math.PI);
+            double cosAngle1 = Math.cos(radianAngle1);
+            double sinAngle1 = Math.sin(radianAngle1);
+
+            double radianAngle2 = ((cp2.facingAngle / 180) * Math.PI);
+            double cosAngle2 = Math.cos(radianAngle2);
+            double sinAngle2 = Math.sin(radianAngle2);
+
+            // The number of times we cross a side.
+            int numCrosses = 0;
+
+            float worldUnrotatedX;
+            float worldUnrotatedY;
+
         }
         return collided;
     }
