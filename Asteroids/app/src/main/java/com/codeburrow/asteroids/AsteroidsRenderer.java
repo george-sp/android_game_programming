@@ -133,6 +133,27 @@ public class AsteroidsRenderer implements Renderer {
         }
     }
 
+    /**
+     * Handles the death of a ship.
+     * Resets the ship's location to the center of the map, play a sound and decrement numLives.
+     */
+    public void lifeLost() {
+        // Reset the ship to the centre.
+        gameManager.ship.setWorldLocation(gameManager.mapWidth / 2, gameManager.mapHeight / 2);
+        // Play a sound.
+        soundManager.playSound("shipexplode");
+        // Deduct a life.
+        gameManager.numLives = gameManager.numLives - 1;
+
+        if (gameManager.numLives == 0) {
+            gameManager.levelNumber = 1;
+            gameManager.numLives = 3;
+            createObjects();
+            gameManager.switchPlayingStatus();
+            soundManager.playSound("gameover");
+        }
+    }
+
     private void createObjects() {
         // Create our game objects.
 
