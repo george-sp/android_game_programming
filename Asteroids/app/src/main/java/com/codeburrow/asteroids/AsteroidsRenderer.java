@@ -5,8 +5,6 @@ import android.graphics.Rect;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
-import org.w3c.dom.Comment;
-
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -313,11 +311,46 @@ public class AsteroidsRenderer implements Renderer {
                 // End comment out to make easier
 
                 // Does bullet need containing?
-                if (CollisionDetection.contain(gameManager.mapWidth, gameManager.mapHeight, gameManager.bullets[i].cp)) {
+                if (CollisionDetection.contain(gameManager.mapWidth, gameManager.mapHeight, gameManager.bullets[i].collisionPackage)) {
                     // Reset the bullet.
                     gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
                     // Play a sound.
                     soundManager.playSound("ricochet");
+                }
+            }
+        }
+
+        // Now we see if anything has hit an asteroid.
+
+        // Check collisions between asteroids and bullets.
+        // Loop through each bullet and asteroid in turn.
+        for (int bulletNum = 0; bulletNum < gameManager.numBullets; bulletNum++) {
+            for (int asteroidNum = 0; asteroidNum < gameManager.numAsteroids; asteroidNum++) {
+                // Check that the current bullet is in flight
+                // and the current asteroid is active before proceeding.
+                if (gameManager.bullets[bulletNum].isInFlight() && gameManager.asteroids[asteroidNum].isActive())
+                    // Perform the collision checks by passing in the collision packages.
+
+                    // A Bullet only has one vertex.
+                    // Our collision detection works on vertex pairs.
+                    if (CollisionDetection.detect(gameManager.bullets[bulletNum].collisionPackage, gameManager.asteroids[asteroidNum].collisionPackage)) {
+                        // If we get a hit...
+                        destroyAsteroid(asteroidNum);
+                        // Reset the bullet.
+                        gameManager.bullets[bulletNum].resetBullet(gameManager.ship.getWorldLocation());
+                    }
+            }
+        }
+        // Check collisions between asteroids and ship.
+        // Loop through each asteroid in turn.
+        for (int asteroidNum = 0; asteroidNum < gameManager.numAsteroids; asteroidNum++) {
+            // Is the current asteroid active before proceeding.
+            if (gameManager.asteroids[asteroidNum].isActive()) {
+                // Perform the collision checks by passing in the collision packages.
+                if (CollisionDetection.detect(gameManager.ship.collisionPackage, gameManager.asteroids[asteroidNum].collisionPackage)) {
+                    // Hit!
+                    destroyAsteroid(asteroidNum);
+                    lifeLost();
                 }
             }
         }
