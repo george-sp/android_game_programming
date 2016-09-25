@@ -76,7 +76,36 @@ public class CollisionDetection {
         }
 
         if (possibleCollision) {
-            return true;
+            double radianAngle = ((cp.facingAngle / 180) * Math.PI);
+            double cosAngle = Math.cos(radianAngle);
+            double sinAngle = Math.sin(radianAngle);
+
+            // Rotate each and every vertex then check for a collision.
+            // If just one is colliding then we have a collision.
+            // Once we have a collision no need to check further.
+            for (int i = 0; i < cp.vertexListLength; i++) {
+                // First update the regular un-rotated model space coordinates
+                // relative to the current world location (centre of object).
+                float worldUnrotatedX = cp.worldLocation.x + cp.vertexList[i].x;
+                float worldUnrotatedY = cp.worldLocation.y + cp.vertexList[i].y;
+                // Now rotate the newly updated point, stored in currentPoint
+                // around the centre point of the object (worldLocation).
+                cp.currentPoint.x = cp.worldLocation.x + (int) ((worldUnrotatedX - cp.worldLocation.x)
+                        * cosAngle - (worldUnrotatedY - cp.worldLocation.y) * sinAngle);
+                cp.currentPoint.y = cp.worldLocation.y + (int) ((worldUnrotatedX - cp.worldLocation.x)
+                        * sinAngle + (worldUnrotatedY - cp.worldLocation.y) * cosAngle);
+
+                // Check the rotated vertex for a collision.
+                if (cp.currentPoint.x < 0) {
+                    return true;
+                } else if (cp.currentPoint.x > mapWidth) {
+                    return true;
+                } else if (cp.currentPoint.y < 0) {
+                    return true;
+                } else if (cp.currentPoint.y > mapHeight) {
+                    return true;
+                }
+            }
         }
         return false;
     }
