@@ -76,6 +76,33 @@ public class CollisionDetection {
             float worldUnrotatedX;
             float worldUnrotatedY;
 
+            // Loop through all the vertices from cp2
+            // then test each in turn with all the sides (vertex pairs) from cp1
+
+            /*
+             * An asteroid has an extra vertex of padding which is the same as the first.
+             * So we can test the last side of the asteroid.
+             * So we must always pass in the asteroid collision package
+             * as the SECOND argument when calling CollisionDetection.detect.
+             */
+            for (int i = 0; i < cp1.vertexListLength; i++) {
+                /*
+                 * First
+                 * - we need to rotate the model-space coordinate we are testing to its current world position.
+                 * - update the regular un-rotated model space coordinates relative to the current world location (centre of object).
+                 */
+                worldUnrotatedX = cp1.worldLocation.x + cp1.vertexList[i].x;
+                worldUnrotatedY = cp1.worldLocation.y + cp1.vertexList[i].y;
+
+                // Now rotate the newly updated point,
+                // stored in currentPoint around the centre point of the object (worldLocation).
+                cp1.currentPoint.x = cp1.worldLocation.x + (int) ((worldUnrotatedX - cp1.worldLocation.x)
+                        * cosAngle1 - (worldUnrotatedY - cp1.worldLocation.y) * sinAngle1);
+
+                cp1.currentPoint.y = cp1.worldLocation.y + (int) ((worldUnrotatedX - cp1.worldLocation.x)
+                        * sinAngle1 + (worldUnrotatedY - cp1.worldLocation.y) * cosAngle1);
+                // cp1.currentPoint now hold the x/y world coordinates of the first point to test.
+            }
         }
         return collided;
     }
