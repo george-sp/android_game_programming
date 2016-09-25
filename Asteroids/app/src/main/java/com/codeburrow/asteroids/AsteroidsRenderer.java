@@ -5,6 +5,8 @@ import android.graphics.Rect;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
+import org.w3c.dom.Comment;
+
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -254,6 +256,69 @@ public class AsteroidsRenderer implements Renderer {
         for (int i = 0; i < gameManager.numAsteroids; i++) {
             if (gameManager.asteroids[i].isActive()) {
                 gameManager.asteroids[i].update(fps);
+            }
+        }
+        // End of all updates!!
+
+        // All objects are in their new locations.
+        // Start collision detection.
+
+        // Check if the ship needs containing.
+        if (CollisionDetection.contain(gameManager.mapWidth, gameManager.mapHeight, gameManager.ship.collisionPackage)) {
+            lifeLost();
+        }
+
+        // Check if an asteroid needs containing.
+        for (int i = 0; i < gameManager.numAsteroids; i++) {
+            if (gameManager.asteroids[i].isActive()) {
+                if (CollisionDetection.contain(gameManager.mapWidth, gameManager.mapHeight, gameManager.asteroids[i].collisionPackage)) {
+                    // Bounce the asteroid back into the game.
+                    gameManager.asteroids[i].bounce();
+                    // Play a sound.
+                    soundManager.playSound("blip");
+                }
+            }
+        }
+
+        // Check if bullet needs containing.
+        // But first see if the bullet is out of sight.
+        // If it is reset it to make game harder.
+        for (int i = 0; i < gameManager.numBullets; i++) {
+            // Is the bullet in flight?
+            if (gameManager.bullets[i].isInFlight()) {
+                /*
+                 * Comment the next block to make the game easier!!!
+                 * It will allow the bullets to go all the way from ship to border without being reset.
+                 * These lines reset the bullet when shortly after they leave the players view.
+                 * This forces the player to go 'hunting' for the asteroids
+                 * instead of spinning round spamming the fire button...
+                 */
+
+                // Start comment out to make easier.
+                handyPointF = gameManager.bullets[i].getWorldLocation();
+                handyPointF2 = gameManager.ship.getWorldLocation();
+                if (handyPointF.x > handyPointF2.x + gameManager.metresToShowX / 2) {
+                    // Reset the bullet.
+                    gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
+                } else if (handyPointF.x < handyPointF2.x - gameManager.metresToShowX / 2) {
+                    // Reset the bullet.
+                    gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
+                } else if (handyPointF.y > handyPointF2.y + gameManager.metresToShowY / 2) {
+                    // Reset the bullet.
+                    gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
+                } else if (handyPointF.y < handyPointF2.y - gameManager.metresToShowY / 2) {
+                    // Reset the bullet.
+                    gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
+                }
+                // End comment out to make easier
+
+                // Does bullet need containing?
+                if (CollisionDetection.contain(gameManager.mapWidth, gameManager.mapHeight, gameManager.bullets[i].cp)) {
+                    // Reset the bullet.
+                    gameManager.bullets[i].resetBullet(gameManager.ship.getWorldLocation());
+                    // Play a sound.
+                    soundManager.playSound("ricochet");
+                }
             }
         }
     }
