@@ -141,7 +141,21 @@ public class CollisionDetection {
 
                     cp2.currentPoint2.y = cp2.worldLocation.y + (int) ((worldUnrotatedX - cp2.worldLocation.x)
                             * sinAngle2 + (worldUnrotatedY - cp2.worldLocation.y) * cosAngle2);
+                    // And now we can test the rotated point from cp1
+                    // against the rotated points which form a side from cp2.
+                    if (((cp2.currentPoint.y > cp1.currentPoint.y) != (cp2.currentPoint2.y > cp1.currentPoint.y)) &&
+                            (cp1.currentPoint.x < (cp2.currentPoint2.x - cp2.currentPoint2.x) * (cp1.currentPoint.y - cp2.currentPoint.y) / (cp2.currentPoint2.y - cp2.currentPoint.y) + cp2.currentPoint.x))
+                        numCrosses++;
                 }
+            }
+
+            // So do we have a collision?
+            if (numCrosses % 2 == 0) {
+                // even number of crosses(outside asteroid)
+                collided = false;
+            } else {
+                // odd number of crosses(inside asteroid)
+                collided = true;
             }
         }
         return collided;
