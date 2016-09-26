@@ -102,6 +102,46 @@ public class CollisionDetection {
                 cp1.currentPoint.y = cp1.worldLocation.y + (int) ((worldUnrotatedX - cp1.worldLocation.x)
                         * sinAngle1 + (worldUnrotatedY - cp1.worldLocation.y) * cosAngle1);
                 // cp1.currentPoint now hold the x/y world coordinates of the first point to test.
+
+                /**
+                 * Use two vertices at a time to represent the line we are testing.
+                 * We don't test the last vertex because we are testing pairs
+                 * and the last vertex of cp2 is the padded extra vertex.
+                 * It will form part of the last side when we test vertexList[5].
+                 */
+                for (int j = 0; j < cp2.vertexListLength - 1; j++) {
+                    // Now we get the rotated coordinates of BOTH the current 2 points
+                    // being used to form a side from cp2 (the asteroid).
+                    // First we need to rotate the model-space coordinate we are testing
+                    // to its current world position.
+                    // Update the regular un-rotated model space coordinates
+                    // relative to the current world location (centre of object).
+                    worldUnrotatedX = cp2.worldLocation.x + cp2.vertexList[j].x;
+                    worldUnrotatedY = cp2.worldLocation.y + cp2.vertexList[j].y;
+
+                    // Now rotate the newly updated point, stored in worldUnrotatedX/y
+                    // around the centre point of the object (worldLocation).
+                    cp2.currentPoint.x = cp2.worldLocation.x + (int) ((worldUnrotatedX - cp2.worldLocation.x) * cosAngle2 - (worldUnrotatedY - cp2.worldLocation.y) * sinAngle2);
+
+                    cp2.currentPoint.y = cp2.worldLocation.y + (int) ((worldUnrotatedX - cp2.worldLocation.x) * sinAngle2 + (worldUnrotatedY - cp2.worldLocation.y) * cosAngle2);
+                    // cp2.currentPoint now hold the x/y world coordinates
+                    // of the first point that will represent a line from the asteroid.
+
+                    // No we can do exactly the same for the second vertex
+                    // and store it in currentPoint2.
+                    // We will then have a point and a line (two vertices)
+                    // we can use the crossing number algorithm on.
+                    worldUnrotatedX = cp2.worldLocation.x + cp2.vertexList[i + 1].x;
+                    worldUnrotatedY = cp2.worldLocation.y + cp2.vertexList[i + 1].y;
+
+                    // Now rotate the newly updated point, stored in worldUnrotatedX/Y
+                    // around the centre point of the object (worldLocation).
+                    cp2.currentPoint2.x = cp2.worldLocation.x + (int) ((worldUnrotatedX - cp2.worldLocation.x)
+                            * cosAngle2 - (worldUnrotatedY - cp2.worldLocation.y) * sinAngle2);
+
+                    cp2.currentPoint2.y = cp2.worldLocation.y + (int) ((worldUnrotatedX - cp2.worldLocation.x)
+                            * sinAngle2 + (worldUnrotatedY - cp2.worldLocation.y) * cosAngle2);
+                }
             }
         }
         return collided;
@@ -117,6 +157,7 @@ public class CollisionDetection {
      * @param cp
      * @return True if an intersection is detected.
      */
+
     public static boolean contain(float mapWidth, float mapHeight, CollisionPackage cp) {
         boolean possibleCollision = false;
 
