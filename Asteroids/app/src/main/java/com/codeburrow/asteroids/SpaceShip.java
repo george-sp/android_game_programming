@@ -73,6 +73,11 @@ public class SpaceShip extends GameObject {
         collisionPackage = new CollisionPackage(points, getWorldLocation(), length / 2, getFacingAngle());
     }
 
+    public boolean pullTrigger() {
+        // Try and fire a shot.
+        return true;
+    }
+
     public void setPressingRight(boolean pressingRight) {
         this.isPressingRight = pressingRight;
     }

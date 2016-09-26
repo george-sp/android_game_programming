@@ -69,7 +69,7 @@ public class InputController {
         return currentButtonList;
     }
 
-    public void handleInput(MotionEvent motionEvent, GameManager l, SoundManager sound) {
+    public void handleInput(MotionEvent motionEvent, GameManager gameManager, SoundManager sound) {
         int pointerCount = motionEvent.getPointerCount();
 
         for (int i = 0; i < pointerCount; i++) {
@@ -79,62 +79,62 @@ public class InputController {
             switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     if (right.contains(x, y)) {
-                        l.ship.setPressingRight(true);
-                        l.ship.setPressingLeft(false);
+                        gameManager.ship.setPressingRight(true);
+                        gameManager.ship.setPressingLeft(false);
                     } else if (left.contains(x, y)) {
-                        l.ship.setPressingLeft(true);
-                        l.ship.setPressingRight(false);
+                        gameManager.ship.setPressingLeft(true);
+                        gameManager.ship.setPressingRight(false);
                     } else if (thrust.contains(x, y)) {
-                        l.ship.toggleThrust();
+                        gameManager.ship.toggleThrust();
                     } else if (shoot.contains(x, y)) {
-                        if (l.ship.pullTrigger()) {
-                            l.bullets[currentBullet].shoot(l.ship.getFacingAngle());
+                        if (gameManager.ship.pullTrigger()) {
+                            gameManager.bullets[currentBullet].shoot(gameManager.ship.getFacingAngle());
                             currentBullet++;
                             // If we are on the last bullet restart from the first one again.
-                            if (currentBullet == l.numBullets) {
+                            if (currentBullet == gameManager.numBullets) {
                                 currentBullet = 0;
                             }
                             sound.playSound("shoot");
                         }
                     } else if (pause.contains(x, y)) {
-                        l.switchPlayingStatus();
+                        gameManager.switchPlayingStatus();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                     if (right.contains(x, y)) {
-                        l.ship.setPressingRight(false);
+                        gameManager.ship.setPressingRight(false);
                     } else if (left.contains(x, y)) {
-                        l.ship.setPressingLeft(false);
+                        gameManager.ship.setPressingLeft(false);
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     if (right.contains(x, y)) {
-                        l.ship.setPressingRight(true);
-                        l.ship.setPressingLeft(false);
+                        gameManager.ship.setPressingRight(true);
+                        gameManager.ship.setPressingLeft(false);
                     } else if (left.contains(x, y)) {
-                        l.ship.setPressingLeft(true);
-                        l.ship.setPressingRight(false);
+                        gameManager.ship.setPressingLeft(true);
+                        gameManager.ship.setPressingRight(false);
                     } else if (thrust.contains(x, y)) {
-                        l.ship.toggleThrust();
+                        gameManager.ship.toggleThrust();
                     } else if (shoot.contains(x, y)) {
-                        if (l.ship.pullTrigger()) {
-                            l.bullets[currentBullet].shoot(l.ship.getFacingAngle());
+                        if (gameManager.ship.pullTrigger()) {
+                            gameManager.bullets[currentBullet].shoot(gameManager.ship.getFacingAngle());
                             currentBullet++;
                             // If we are on the last bullet restart from the first one again.
-                            if (currentBullet == l.numBullets) {
+                            if (currentBullet == gameManager.numBullets) {
                                 currentBullet = 0;
                             }
                             sound.playSound("shoot");
                         }
                     } else if (pause.contains(x, y)) {
-                        l.switchPlayingStatus();
+                        gameManager.switchPlayingStatus();
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
                     if (right.contains(x, y)) {
-                        l.ship.setPressingRight(false);
+                        gameManager.ship.setPressingRight(false);
                     } else if (left.contains(x, y)) {
-                        l.ship.setPressingLeft(false);
+                        gameManager.ship.setPressingLeft(false);
                     }
                     break;
             }
